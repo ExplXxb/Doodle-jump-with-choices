@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
 
     private Rigidbody2D _rigidbody2D;
     private Vector2 _inputVector;
-    private float _verticalSpeed;
+    private float _verticalSpeed = 20.0f;
     private bool _isGrounded;
 
     private void Awake()
