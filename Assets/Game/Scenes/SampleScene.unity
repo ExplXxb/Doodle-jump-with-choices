@@ -693,11 +693,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee53d424b97590f4594009fd7faac55b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
+  _groundCheck: {fileID: 858890772}
+  _capsuleCollider2D: {fileID: 454758996}
   _jumpPower: 18
   _movementSpeed: 10
   _gravityAcceleration: 30
   _maxFallSpeed: 1000
-  _groundCheck: {fileID: 858890772}
   _groundCheckRadius: 0.1
   _groundLayer:
     serializedVersion: 2
@@ -1180,7 +1181,6 @@ MonoBehaviour:
   _mainCamera: {fileID: 519420031}
   _platformPrefabs:
   - {fileID: 8389332076042822207, guid: 7b3f5e63a88c5c442b70f6c369d957bc, type: 3}
-  - {fileID: 7420305994245544443, guid: 4fc880d0069f5ea4c904b548e8d5aecd, type: 3}
   _minVerticalGap: 0.5
   _maxVerticalGap: 4
   _horizontalRange: 3
