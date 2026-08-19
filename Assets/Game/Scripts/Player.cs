@@ -9,20 +9,29 @@ public class Player : MonoBehaviour
     public event Action OnStartFalling;
     public event Action OnStartJumping;
     public event Action<float> OnMaxHeightChanged;
+    public event Action OnPlayerDied;
 
+    [Header("Drag'n'drop")]
+    [SerializeField] private Transform _groundCheck;
+    [SerializeField] private CapsuleCollider2D _capsuleCollider2D;
+
+    [Header("General")]
     [SerializeField] private float _jumpPower = 10.0f;
     [SerializeField] private float _movementSpeed = 4f;
     [SerializeField] private float _gravityAcceleration = 9.81f;
     [SerializeField] private float _maxFallSpeed = 20f;
-    [SerializeField] private Transform _groundCheck;
+
+    [Header("Ground Checker")]
     [SerializeField] private float _groundCheckRadius = 0.1f;
     [SerializeField] private LayerMask _groundLayer;
 
     private Rigidbody2D _rigidbody2D;
+    private Camera _mainCamera;
     private Vector2 _inputVector;
-    private float _verticalSpeed = 20.0f;
+    private float _verticalSpeed = 0.0f;
     private bool _isGrounded;
     private float _maxHeight = 0f;
+    private bool _isDead = false;
     
     public bool IsFalling { get; private set; }
     public Vector2 GetInputVector() => _inputVector;
@@ -41,6 +50,13 @@ public class Player : MonoBehaviour
         {
             Debug.LogError($"{nameof(Player)}: відсутній Rigidbody2D на {name}", this);
         }
+
+        _mainCamera = Camera.main;
+    }
+
+    private void Start()
+    {
+        HandleJump();
     }
 
     private void OnDestroy()
@@ -53,11 +69,20 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (_isDead) return;
+
+        if (IsBelowCamera())
+        {
+            Die();
+        }
+
         _inputVector = GameInput.Instance.GetMovementVector();
     }
 
     private void FixedUpdate()
     {
+        if (_isDead) return;
+
         HandleGravity();
         HandleMovement();
         TryUpdateMaxHeight();
@@ -118,5 +143,25 @@ public class Player : MonoBehaviour
             _maxHeight = gameObject.transform.position.y;
             OnMaxHeightChanged?.Invoke(_maxHeight);
         }
+    }
+
+    private bool IsBelowCamera()
+    {
+        float bottomCameraY = GetBottomCameraY();
+
+        return transform.position.y + _capsuleCollider2D.offset.y + (_capsuleCollider2D.size.y / 2) < bottomCameraY;
+    }
+
+    private float GetBottomCameraY()
+    {
+        return _mainCamera.transform.position.y - _mainCamera.orthographicSize;
+    }
+
+    private void Die()
+    {
+        if (_isDead) return;
+        _isDead = true;
+        Debug.Log("Гравець помер!");
+        OnPlayerDied?.Invoke();
     }
 }
