@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 public class PlatformSpawner : MonoBehaviour
 {
+    public static PlatformSpawner Instance {  get; private set; }
+
     [SerializeField] private Transform _cameraTarget;
     [SerializeField] private Camera _mainCamera;
     [SerializeField] private GameObject[] _platformPrefabs;
@@ -17,7 +19,30 @@ public class PlatformSpawner : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+
         InitializePool();
+    }
+
+    private void Update()
+    {
+        float screenTopY = _mainCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y;
+
+        while (_lastSpawnY < screenTopY + _maxVerticalGap)
+        {
+            SpawnPlatform();
+        }
+
+        DespawnBelowScreen();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
     private void InitializePool()
@@ -31,18 +56,6 @@ public class PlatformSpawner : MonoBehaviour
                 _pool.Enqueue(obj);
             }
         }
-    }
-
-    private void Update()
-    {
-        float screenTopY = _mainCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y;
-
-        while (_lastSpawnY < screenTopY + _maxVerticalGap)
-        {
-            SpawnPlatform();
-        }
-
-        DespawnBelowScreen();
     }
 
     private void SpawnPlatform()
@@ -65,12 +78,19 @@ public class PlatformSpawner : MonoBehaviour
 
         for (int i = _activePlatforms.Count - 1; i >= 0; i--)
         {
-            if (_activePlatforms[i].transform.position.y < screenBottomY - 1f)
+            if (_activePlatforms[i].transform.position.y < screenBottomY)
             {
                 _activePlatforms[i].SetActive(false);
                 _pool.Enqueue(_activePlatforms[i]);
                 _activePlatforms.RemoveAt(i);
             }
         }
+    }
+
+    public void DespawnPlatform(GameObject platform)
+    {
+        platform.SetActive(false);
+        _pool.Enqueue(platform);
+        _activePlatforms.Remove(platform);
     }
 }

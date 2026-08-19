@@ -1,9 +1,14 @@
+using System;
 using UnityEngine;
 
 [SelectionBase]
 public class Player : MonoBehaviour
 {
     public static Player Instance { get; private set; }
+
+    public event Action OnStartFalling;
+    public event Action OnStartJumping;
+    public event Action<float> OnMaxHeightChanged;
 
     [SerializeField] private float _jumpPower = 10.0f;
     [SerializeField] private float _movementSpeed = 4f;
@@ -17,6 +22,10 @@ public class Player : MonoBehaviour
     private Vector2 _inputVector;
     private float _verticalSpeed = 20.0f;
     private bool _isGrounded;
+    private float _maxHeight = 0f;
+    
+    public bool IsFalling { get; private set; }
+    public Vector2 GetInputVector() => _inputVector;
 
     private void Awake()
     {
@@ -51,14 +60,31 @@ public class Player : MonoBehaviour
     {
         HandleGravity();
         HandleMovement();
+        TryUpdateMaxHeight();
+    }
+
+    private void DetermineIsFalling()
+    {
+        bool wasFalling = IsFalling;
+        IsFalling = _verticalSpeed <= 0;
+
+        if (IsFalling && !wasFalling)
+            OnStartFalling?.Invoke();
+        else if (!IsFalling && wasFalling)
+            OnStartJumping?.Invoke();
     }
 
     private void CheckGround()
     {
-        _isGrounded = Physics2D.OverlapCircle(_groundCheck.position, _groundCheckRadius, _groundLayer);
+        Collider2D hit = Physics2D.OverlapCircle(_groundCheck.position, _groundCheckRadius, _groundLayer);
+        _isGrounded = hit != null;
 
         if (_isGrounded && _verticalSpeed < 0f)
         {
+            if (hit.TryGetComponent<BreakablePlatform>(out _))
+            {
+                return;
+            }
             HandleJump();
         }
     }
@@ -69,6 +95,7 @@ public class Player : MonoBehaviour
         _verticalSpeed = Mathf.Max(_verticalSpeed, -_maxFallSpeed);
 
         CheckGround();
+        DetermineIsFalling();
     }
 
     private void HandleMovement()
@@ -82,5 +109,14 @@ public class Player : MonoBehaviour
     private void HandleJump()
     {
         _verticalSpeed = _jumpPower;
+    }
+
+    private void TryUpdateMaxHeight()
+    {
+        if (_maxHeight < gameObject.transform.position.y)
+        {
+            _maxHeight = gameObject.transform.position.y;
+            OnMaxHeightChanged?.Invoke(_maxHeight);
+        }
     }
 }
