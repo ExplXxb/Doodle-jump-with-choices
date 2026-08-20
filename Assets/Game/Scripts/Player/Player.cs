@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float _groundCheckRadius = 0.1f;
     [SerializeField] private LayerMask _groundLayer;
 
-    private Rigidbody2D _rigidbody2D;
+    private Rigidbody2D _rigidbody;
     private Camera _mainCamera;
     private Vector2 _inputVector;
     private float _verticalSpeed = 0.0f;
@@ -45,8 +45,8 @@ public class Player : MonoBehaviour
         }
         Instance = this;
 
-        _rigidbody2D = GetComponent<Rigidbody2D>();
-        if (_rigidbody2D == null)
+        _rigidbody = GetComponent<Rigidbody2D>();
+        if (_rigidbody == null)
         {
             Debug.LogError($"{nameof(Player)}: відсутній Rigidbody2D на {name}", this);
         }
@@ -59,14 +59,6 @@ public class Player : MonoBehaviour
         HandleJump();
     }
 
-    private void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            Instance = null;
-        }
-    }
-
     private void Update()
     {
         if (_isDead) return;
@@ -74,6 +66,11 @@ public class Player : MonoBehaviour
         if (IsBelowCamera())
         {
             Die();
+        }
+
+        if (IsBeyondHorizontalBounds())
+        {
+            WrapAroundHorizontally();
         }
 
         _inputVector = GameInput.Instance.GetMovementVector();
@@ -86,6 +83,14 @@ public class Player : MonoBehaviour
         HandleGravity();
         HandleMovement();
         TryUpdateMaxHeight();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
     }
 
     private void DetermineIsFalling()
@@ -128,7 +133,7 @@ public class Player : MonoBehaviour
         Vector2 horizontalMovement = _inputVector * _movementSpeed * Time.fixedDeltaTime;
         Vector2 verticalMovement = new Vector2(0f, _verticalSpeed * Time.fixedDeltaTime);
 
-        _rigidbody2D.MovePosition(_rigidbody2D.position + horizontalMovement + verticalMovement);
+        _rigidbody.MovePosition(_rigidbody.position + horizontalMovement + verticalMovement);
     }
 
     private void HandleJump()
@@ -147,14 +152,34 @@ public class Player : MonoBehaviour
 
     private bool IsBelowCamera()
     {
-        float bottomCameraY = GetBottomCameraY();
+        float bottomCameraY = GetCameraBottomY();
 
-        return transform.position.y + _capsuleCollider2D.offset.y + (_capsuleCollider2D.size.y / 2) < bottomCameraY;
+        return _capsuleCollider2D.bounds.max.y < bottomCameraY;
     }
 
-    private float GetBottomCameraY()
+    private float GetCameraBottomY()
     {
         return _mainCamera.transform.position.y - _mainCamera.orthographicSize;
+    }
+
+    private void WrapAroundHorizontally()
+    {
+        float newX = transform.position.x > _mainCamera.transform.position.x
+            ? _mainCamera.transform.position.x - GetCameraHalfWidth()
+            : _mainCamera.transform.position.x + GetCameraHalfWidth();
+
+        _rigidbody.position = new Vector2(newX, _rigidbody.position.y);
+    }
+
+    private bool IsBeyondHorizontalBounds()
+    {
+        float relativeX = transform.position.x - _mainCamera.transform.position.x;
+        return Mathf.Abs(relativeX) > GetCameraHalfWidth();
+    }
+
+    private float GetCameraHalfWidth()
+    {
+        return _mainCamera.orthographicSize * _mainCamera.aspect;
     }
 
     private void Die()
