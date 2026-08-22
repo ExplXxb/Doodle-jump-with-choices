@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [Header("Drag'n'drop")]
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private CapsuleCollider2D _capsuleCollider2D;
+    [SerializeField] private PlayerSFX _playerSFX;
 
     [Header("General")]
     [SerializeField] private float _jumpPower = 10.0f;
@@ -139,6 +140,7 @@ public class Player : MonoBehaviour
     {
         _verticalSpeed = _jumpPower;
         OnStartJumping?.Invoke();
+        _playerSFX.PlaySound("Jump");
     }
 
     private void TryUpdateMaxHeight()
