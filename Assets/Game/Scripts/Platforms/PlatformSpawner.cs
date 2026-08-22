@@ -10,7 +10,7 @@ public class PlatformSpawner : MonoBehaviour
 
     [SerializeField] private float _screenPaddingX = 1f;
 
-    private Dictionary<PlatformSpawnSettings, Queue<GameObject>> _platformPools = new Dictionary<PlatformSpawnSettings, Queue<GameObject>>();
+    private Dictionary<GameObject, Queue<GameObject>> _platformPools = new Dictionary<GameObject, Queue<GameObject>>();
     private Dictionary<GameObject, PlatformSpawnSettings> _activePlatforms = new Dictionary<GameObject, PlatformSpawnSettings>();
 
     private float _lastSpawnY;
@@ -96,7 +96,7 @@ public class PlatformSpawner : MonoBehaviour
     {
         GameObject platform;
 
-        if (_platformPools.TryGetValue(chosenSettings, out var queue) && queue.Count > 0)
+        if (_platformPools.TryGetValue(chosenSettings.Prefab, out var queue) && queue.Count > 0)
         {
             platform = queue.Dequeue();
         }
@@ -176,7 +176,7 @@ public class PlatformSpawner : MonoBehaviour
         {
             platform.SetActive(false);
 
-            if (_platformPools.TryGetValue(originalSettings, out var queue))
+            if (_platformPools.TryGetValue(originalSettings.Prefab, out var queue))
             {
                 queue.Enqueue(platform);
             }
@@ -184,7 +184,7 @@ public class PlatformSpawner : MonoBehaviour
             {
                 var newQueue = new Queue<GameObject>();
                 newQueue.Enqueue(platform);
-                _platformPools.Add(originalSettings, newQueue);
+                _platformPools.Add(originalSettings.Prefab, newQueue);
             }
 
             _activePlatforms.Remove(platform);

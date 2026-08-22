@@ -58,7 +58,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        HandleJump();
+        _verticalSpeed = _jumpPower;
     }
 
     private void Update()
