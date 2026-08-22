@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     [Header("Drag'n'drop")]
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private CapsuleCollider2D _capsuleCollider2D;
+    [SerializeField] private PlayerSFX _playerSFX;
 
     [Header("General")]
     [SerializeField] private float _jumpPower = 10.0f;
@@ -35,6 +36,7 @@ public class Player : MonoBehaviour
     
     public bool IsFalling { get; private set; }
     public Vector2 GetInputVector() => _inputVector;
+    public Vector2 GetGroundCheckPosition() => _groundCheck.position;
 
     private void Awake()
     {
@@ -100,8 +102,6 @@ public class Player : MonoBehaviour
 
         if (IsFalling && !wasFalling)
             OnStartFalling?.Invoke();
-        else if (!IsFalling && wasFalling)
-            OnStartJumping?.Invoke();
     }
 
     private void CheckGround()
@@ -139,6 +139,8 @@ public class Player : MonoBehaviour
     private void HandleJump()
     {
         _verticalSpeed = _jumpPower;
+        OnStartJumping?.Invoke();
+        _playerSFX.PlaySound("Jump");
     }
 
     private void TryUpdateMaxHeight()

@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class PlayerVisual : MonoBehaviour
 {
+    [SerializeField] private GameObject _jumpingVFXPrefab;
+    [SerializeField] private Vector2 _vfxOffset = new Vector2(0f, -0.267f);
+
     private Animator _animator;
     private SpriteRenderer _spriteRenderer;
     private const string IS_FALLING = "IsFalling";
@@ -16,6 +19,7 @@ public class PlayerVisual : MonoBehaviour
     {
         Player.Instance.OnStartFalling += SetFallingAnimation;
         Player.Instance.OnStartJumping += SetJumpingAnimation;
+        Player.Instance.OnStartJumping += HandleJumpingVFX;
     }
 
     private void Update()
@@ -29,6 +33,7 @@ public class PlayerVisual : MonoBehaviour
         {
             Player.Instance.OnStartFalling -= SetFallingAnimation;
             Player.Instance.OnStartJumping -= SetJumpingAnimation;
+            Player.Instance.OnStartJumping -= HandleJumpingVFX;
         }
     }
 
@@ -50,5 +55,12 @@ public class PlayerVisual : MonoBehaviour
             _spriteRenderer.flipX = false;
         else if (horizontalInput < -0.01f)
             _spriteRenderer.flipX = true;
+    }
+
+    private void HandleJumpingVFX()
+    {
+        Vector2 spawnPosition = Player.Instance.GetGroundCheckPosition() + _vfxOffset;
+
+        Instantiate(_jumpingVFXPrefab, spawnPosition, Quaternion.identity);
     }
 }

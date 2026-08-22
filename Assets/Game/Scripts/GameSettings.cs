@@ -31,24 +31,20 @@ public class GameSettings : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Start()");
         _currentGenerationZone = _generationSettings.Zones[0];
         _currentGenerationZone = TryGetSuitableGenerationZone(_currentGenerationZone);
     }
 
     private void Update()
     {
-        Debug.Log("Update()");
         if (_scoreSystem.Score < _currentGenerationZone.MinScore || _scoreSystem.Score > _currentGenerationZone.MaxScore)
         {
-            Debug.Log("if в Update()");
             _currentGenerationZone = TryGetSuitableGenerationZone(_currentGenerationZone);
         }
     }
 
     private GenerationZone TryGetSuitableGenerationZone(GenerationZone currentGenerationZone)
     {
-        Debug.Log("TryGetSuitableGenerationZone(GenerationZone currentGenerationZone)");
         int currentScore = _scoreSystem.Score;
         GenerationZone result = currentGenerationZone.Clone();
 
@@ -81,8 +77,6 @@ public class GameSettings : MonoBehaviour
 
     private GenerationZone GetMostSuitableGenerationZone()
     {
-        Debug.Log("GetMostSuitableGenerationZone()");
-
         int currentScore = _scoreSystem.Score;
         int minUnsuitability = int.MaxValue;
 
