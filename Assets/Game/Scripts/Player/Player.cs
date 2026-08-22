@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
     
     public bool IsFalling { get; private set; }
     public Vector2 GetInputVector() => _inputVector;
+    public Vector2 GetGroundCheckPosition() => _groundCheck.position;
 
     private void Awake()
     {
@@ -100,8 +101,6 @@ public class Player : MonoBehaviour
 
         if (IsFalling && !wasFalling)
             OnStartFalling?.Invoke();
-        else if (!IsFalling && wasFalling)
-            OnStartJumping?.Invoke();
     }
 
     private void CheckGround()
@@ -139,6 +138,7 @@ public class Player : MonoBehaviour
     private void HandleJump()
     {
         _verticalSpeed = _jumpPower;
+        OnStartJumping?.Invoke();
     }
 
     private void TryUpdateMaxHeight()
