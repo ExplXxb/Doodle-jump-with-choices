@@ -111,10 +111,18 @@ public class Player : MonoBehaviour
 
         if (_isGrounded && _verticalSpeed < 0f)
         {
-            if (hit.TryGetComponent<BreakablePlatform>(out _))
+            if (hit.TryGetComponent<IPlatformBehavior>(out var platform))
             {
+                platform.OnPlayerLanded();
+
+                if (platform.ShouldJump == true)
+                {
+                    HandleJump();
+                }
+
                 return;
             }
+
             HandleJump();
         }
     }
