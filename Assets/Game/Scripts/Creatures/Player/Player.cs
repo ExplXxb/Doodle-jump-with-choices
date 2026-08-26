@@ -77,7 +77,6 @@ public class Player : MonoBehaviour
     private void Start()
     {
         _verticalSpeed = _jumpPower;
-        Time.timeScale = 0.1f;
     }
 
     private void Update()
