@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 1326323102508470481}
   - component: {fileID: 7571196302364961321}
   - component: {fileID: 8192752871986187284}
+  - component: {fileID: -4742468536582401539}
   m_Layer: 0
   m_Name: EnemyBase
   m_TagString: Untagged
@@ -188,6 +189,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyContactDamage
   _damage: 1
+--- !u!114 &-4742468536582401539
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2321363084212254075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e68db995436caf47929996fa6fb5b4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAnimator
+  _animator: {fileID: 0}
 --- !u!1 &4563240765875246592
 GameObject:
   m_ObjectHideFlags: 0

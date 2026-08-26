@@ -3,7 +3,7 @@ using UnityEngine;
 public class EnemyAnimator : MonoBehaviour
 {
     private static readonly int DIE_HASH = Animator.StringToHash("Die");
-    private static readonly int SPEED_HASH = Animator.StringToHash("Die");
+    private static readonly int SPEED_HASH = Animator.StringToHash("Speed");
 
     [SerializeField] private Animator _animator;
 

@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -4742468536582401539, guid: 8714265f0acba1647b76f342be0d7a27, type: 3}
+      propertyPath: _animator
+      value: 
+      objectReference: {fileID: 3363267768558568384}
     - target: {fileID: 456194990138182332, guid: 8714265f0acba1647b76f342be0d7a27, type: 3}
       propertyPath: m_Name
       value: Stomp Zone
@@ -24,9 +28,17 @@ PrefabInstance:
       propertyPath: _enemyHitboxCollider
       value: 
       objectReference: {fileID: 153880927859407495}
+    - target: {fileID: 1326323102508470481, guid: 8714265f0acba1647b76f342be0d7a27, type: 3}
+      propertyPath: _visualEvents
+      value: 
+      objectReference: {fileID: 3033950105640053837}
+    - target: {fileID: 1326323102508470481, guid: 8714265f0acba1647b76f342be0d7a27, type: 3}
+      propertyPath: _deathVFXPrefab
+      value: 
+      objectReference: {fileID: 8207548161419927570, guid: a9744168f959483429e7eb370435c703, type: 3}
     - target: {fileID: 2321363084212254075, guid: 8714265f0acba1647b76f342be0d7a27, type: 3}
       propertyPath: m_Name
-      value: Capsule Enemy
+      value: Cat
       objectReference: {fileID: 0}
     - target: {fileID: 2551213980237872238, guid: 8714265f0acba1647b76f342be0d7a27, type: 3}
       propertyPath: m_Sprite
@@ -126,6 +138,12 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5679212409130250196, guid: 8714265f0acba1647b76f342be0d7a27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3363267768558568384}
+    - targetCorrespondingSourceObject: {fileID: 5679212409130250196, guid: 8714265f0acba1647b76f342be0d7a27, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3033950105640053837}
     - targetCorrespondingSourceObject: {fileID: 4563240765875246592, guid: 8714265f0acba1647b76f342be0d7a27, type: 3}
       insertIndex: -1
       addedObject: {fileID: 153880927859407495}
@@ -172,3 +190,42 @@ CapsuleCollider2D:
   m_Offset: {x: -0.10832748, y: -0.11066207}
   m_Size: {x: 1.0953344, y: 0.7786835}
   m_Direction: 1
+--- !u!1 &6881657048288272565 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5679212409130250196, guid: 8714265f0acba1647b76f342be0d7a27, type: 3}
+  m_PrefabInstance: {fileID: 1247518019169275745}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &3363267768558568384
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6881657048288272565}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: afd502516d68d8843953723496dddf66, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3033950105640053837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6881657048288272565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8606cc488ca5add40aa33f113fd4b86d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyVisualEvents
