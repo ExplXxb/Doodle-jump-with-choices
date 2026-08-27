@@ -43,6 +43,12 @@ public class Health : MonoBehaviour, IDamageable
         Die();
     }
 
+    public void Reset()
+    {
+        _currentHealth = _maxHealth;
+        _isDead = false;
+    }
+
     private void Die()
     {
         _isDead = true;

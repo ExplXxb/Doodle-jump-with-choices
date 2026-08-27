@@ -36,6 +36,16 @@ public class EnemyAnimator : MonoBehaviour
         }
     }
 
+    public void ResetAnimator()
+    {
+        if (_animator != null)
+        {
+            _animator.ResetTrigger(DIE_HASH);
+            _animator.Play("Idle", 0, 0f);
+            _animator.Update(0f);
+        }
+    }
+
     private void HandleDeath()
     {
         _animator.SetTrigger(DIE_HASH);

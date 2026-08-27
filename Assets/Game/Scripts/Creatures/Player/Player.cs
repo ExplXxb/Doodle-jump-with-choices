@@ -226,7 +226,6 @@ public class Player : MonoBehaviour
 
     private void HandleDeath()
     {
-        Debug.Log("Гравець помер!");
         OnPlayerDied?.Invoke();
     }
 }

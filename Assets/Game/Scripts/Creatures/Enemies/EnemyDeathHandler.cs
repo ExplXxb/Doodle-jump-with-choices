@@ -4,12 +4,19 @@ public class EnemyDeathHandler : MonoBehaviour
 {
     [SerializeField] private GameObject _deathVFXPrefab;
     [SerializeField] private EnemyVisualEvents _visualEvents;
+    [SerializeField] private EnemyAnimator _enemyAnimator;
 
     private Health _health;
 
     private void Awake()
     {
         _health = GetComponent<Health>();
+
+        if (_enemyAnimator == null)
+        {
+            Debug.LogWarning($"{nameof(EnemyDeathHandler)}: відсутній {nameof(EnemyAnimator)} на {name}", this);
+            _enemyAnimator = GetComponent<EnemyAnimator>();
+        }
 
         if (_visualEvents == null)
         {
@@ -51,6 +58,14 @@ public class EnemyDeathHandler : MonoBehaviour
         if (_deathVFXPrefab != null)
         {
             Instantiate(_deathVFXPrefab, transform.position, transform.rotation);
+        }
+
+        
+        _health.Reset();
+
+        if (_enemyAnimator != null)
+        {
+            _enemyAnimator.ResetAnimator();
         }
 
         gameObject.SetActive(false);
