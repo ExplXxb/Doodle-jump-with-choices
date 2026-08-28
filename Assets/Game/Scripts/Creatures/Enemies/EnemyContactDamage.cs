@@ -6,6 +6,6 @@ public class EnemyContactDamage : MonoBehaviour
 
     public void HandleCollision(IDamageable damageable)
     {
-        damageable.TakeDamage(_damage);
+        damageable.TakeDamage(new DamageInfo(_damage, transform));
     }
 }

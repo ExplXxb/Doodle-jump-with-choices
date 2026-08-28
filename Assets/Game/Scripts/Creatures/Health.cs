@@ -3,12 +3,16 @@ using UnityEngine;
 
 public class Health : MonoBehaviour, IDamageable
 {
+    public event Action<DamageInfo> OnTakeDamage;
     public event Action OnDeath;
 
     [SerializeField] private float _maxHealth = 3;
 
     private float _currentHealth;
     private bool _isDead = false;
+    private bool _isInvulnerable;
+
+    public void SetInvulnerable(bool value) => _isInvulnerable = value;
 
     public float MaxHealth => _maxHealth;
     public float CurrentHealth => _currentHealth;
@@ -19,20 +23,27 @@ public class Health : MonoBehaviour, IDamageable
         _currentHealth = _maxHealth;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(DamageInfo damageInfo)
     {
-        if (damage <= 0)
+        if (_isInvulnerable) 
+            return;
+
+        if (damageInfo.Amount <= 0)
             return;
 
         if (_isDead == true)
             return;
 
-        _currentHealth -= damage;
-        Debug.Log("Target (" + gameObject + ") take damage, health: " + (_currentHealth + damage) + " => " + _currentHealth);
+        _currentHealth -= damageInfo.Amount;
+        Debug.Log("Target (" + gameObject + ") take damage, health: " + (_currentHealth + damageInfo.Amount) + " => " + _currentHealth);
 
         if (_currentHealth <= 0)
         {
             Die();
+        }
+        else
+        {
+            OnTakeDamage?.Invoke(damageInfo);
         }
     }
 

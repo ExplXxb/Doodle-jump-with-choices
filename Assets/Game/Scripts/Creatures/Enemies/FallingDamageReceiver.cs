@@ -17,8 +17,8 @@ public class FallingDamageReceiver : MonoBehaviour
         }
     }
 
-    public void ReceiveFallingDamage(float damage)
+    public void ReceiveFallingDamage(float damage, Vector2 sourcePosition)
     {
-        _damageable?.TakeDamage(damage);
+        _damageable?.TakeDamage(new DamageInfo(damage, sourcePosition));
     }
 }
