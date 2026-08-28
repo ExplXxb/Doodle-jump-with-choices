@@ -630,8 +630,6 @@ GameObject:
   - component: {fileID: 550292075}
   - component: {fileID: 550292077}
   - component: {fileID: 550292076}
-  - component: {fileID: 550292078}
-  - component: {fileID: 550292079}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -722,40 +720,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
   _maxHealth: 3
---- !u!114 &550292078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 550292071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87109e9dc68d424d888745a91c27585, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHitReaction
-  _knockbackForce: 8
-  _knockbackDrag: 12
-  _hitStunDuration: 0.15
-  _controlRampDuration: 0.3
-  _invulnerabilityDuration: 1
---- !u!114 &550292079
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 550292071}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a490a4fa89f05484ca1e89417454c935, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerDamageFeedback
-  _health: {fileID: 550292077}
-  _spriteRenderer: {fileID: 1988247970}
-  _playerSFX: {fileID: 1540989564}
-  _blinkInterval: 0.08
-  _blinkDuration: 1
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1400,14 +1364,6 @@ MonoBehaviour:
   - actionName: Jump
     clips:
     - {fileID: 8300000, guid: 7ee3bc923206e6e41a530dee64daf474, type: 3}
-    volume: 0.3
-  - actionName: Hit
-    clips:
-    - {fileID: 8300000, guid: 68edf81a26f0146418a7eac7eb8f7bcd, type: 3}
-    volume: 0.2
-  - actionName: Death
-    clips:
-    - {fileID: 8300000, guid: 72d44f560fa3df34284172753f61b15f, type: 3}
     volume: 0.3
 --- !u!82 &1540989565
 AudioSource:

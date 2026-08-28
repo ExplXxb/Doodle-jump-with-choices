@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [SelectionBase]
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
     private bool _isGrounded;
     private float _maxHeight = 0f;
     private Health _health;
+    private PlayerHitReaction _hitReaction;
 
     public bool IsFalling { get; private set; }
     public bool IsDead => _health.IsDead;
@@ -61,16 +63,24 @@ public class Player : MonoBehaviour
             Debug.LogError($"{nameof(Player)}: відсутній {nameof(Health)} на {name}", this);
         }
 
+        _hitReaction = GetComponent<PlayerHitReaction>();
+        if (_hitReaction == null)
+        {
+            Debug.LogError($"{nameof(Player)}: відсутній {nameof(PlayerHitReaction)} на {name}", this);
+        }
+
         _mainCamera = Camera.main;
     }
 
     private void OnEnable()
     {
+        _health.OnTakeDamage += HandleTakeDamage;
         _health.OnDeath += HandleDeath;
     }
 
     private void OnDisable()
     {
+        _health.OnTakeDamage -= HandleTakeDamage;
         _health.OnDeath -= HandleDeath;
     }
 
@@ -100,6 +110,7 @@ public class Player : MonoBehaviour
     {
         if (IsDead) return;
 
+        _hitReaction.Tick(Time.fixedDeltaTime);
         HandleGravity();
         HandleMovement();
         TryUpdateMaxHeight();
@@ -151,7 +162,7 @@ public class Player : MonoBehaviour
 
         if (fallingDamageReceiver != null)
         {
-            fallingDamageReceiver.ReceiveFallingDamage(_stompDamage);
+            fallingDamageReceiver.ReceiveFallingDamage(_stompDamage, transform.position);
             HandleJump();
             return;
         }
@@ -170,10 +181,11 @@ public class Player : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector2 horizontalMovement = _inputVector * _movementSpeed * Time.fixedDeltaTime;
+        Vector2 horizontalMovement = _inputVector * _hitReaction.InputMultiplier * _movementSpeed * Time.fixedDeltaTime;
         Vector2 verticalMovement = new Vector2(0f, _verticalSpeed * Time.fixedDeltaTime);
+        Vector2 knockback = _hitReaction.KnockbackDisplacement;
 
-        _rigidbody.MovePosition(_rigidbody.position + horizontalMovement + verticalMovement);
+        _rigidbody.MovePosition(_rigidbody.position + horizontalMovement + verticalMovement + knockback);
     }
 
     private void HandleJump()
@@ -222,6 +234,11 @@ public class Player : MonoBehaviour
     private float GetCameraHalfWidth()
     {
         return _mainCamera.orthographicSize * _mainCamera.aspect;
+    }
+
+    private void HandleTakeDamage(DamageInfo damageInfo)
+    {
+        _hitReaction.ApplyHit(damageInfo.SourcePosition, transform.position);
     }
 
     private void HandleDeath()
