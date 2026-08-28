@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerSFX _playerSFX;
 
     [Header("General")]
+    [SerializeField] private float _stompDamage = 1.0f;
     [SerializeField] private float _jumpPower = 10.0f;
     [SerializeField] private float _movementSpeed = 4f;
     [SerializeField] private float _gravityAcceleration = 9.81f;
@@ -32,9 +33,10 @@ public class Player : MonoBehaviour
     private float _verticalSpeed = 0.0f;
     private bool _isGrounded;
     private float _maxHeight = 0f;
-    private bool _isDead = false;
-    
+    private Health _health;
+
     public bool IsFalling { get; private set; }
+    public bool IsDead => _health.IsDead;
     public Vector2 GetInputVector() => _inputVector;
     public Vector2 GetGroundCheckPosition() => _groundCheck.position;
 
@@ -53,21 +55,37 @@ public class Player : MonoBehaviour
             Debug.LogError($"{nameof(Player)}: відсутній Rigidbody2D на {name}", this);
         }
 
+        _health = GetComponent<Health>();
+        if (_health == null)
+        {
+            Debug.LogError($"{nameof(Player)}: відсутній {nameof(Health)} на {name}", this);
+        }
+
         _mainCamera = Camera.main;
+    }
+
+    private void OnEnable()
+    {
+        _health.OnDeath += HandleDeath;
+    }
+
+    private void OnDisable()
+    {
+        _health.OnDeath -= HandleDeath;
     }
 
     private void Start()
     {
-        HandleJump();
+        _verticalSpeed = _jumpPower;
     }
 
     private void Update()
     {
-        if (_isDead) return;
+        if (IsDead) return;
 
         if (IsBelowCamera())
         {
-            Die();
+            _health.Kill();
         }
 
         if (IsBeyondHorizontalBounds())
@@ -80,7 +98,7 @@ public class Player : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (_isDead) return;
+        if (IsDead) return;
 
         HandleGravity();
         HandleMovement();
@@ -106,25 +124,39 @@ public class Player : MonoBehaviour
 
     private void CheckGround()
     {
-        Collider2D hit = Physics2D.OverlapCircle(_groundCheck.position, _groundCheckRadius, _groundLayer);
+        Collider2D hit = Physics2D.OverlapCircle(
+            _groundCheck.position,
+            _groundCheckRadius,
+            _groundLayer
+        );
+
         _isGrounded = hit != null;
 
-        if (_isGrounded && _verticalSpeed < 0f)
+        if (!_isGrounded || _verticalSpeed >= 0f)
+            return;
+
+        if (hit.TryGetComponent<IPlatformBehavior>(out var platform))
         {
-            if (hit.TryGetComponent<IPlatformBehavior>(out var platform))
+            platform.OnPlayerLanded();
+
+            if (platform.ShouldJump)
             {
-                platform.OnPlayerLanded();
-
-                if (platform.ShouldJump == true)
-                {
-                    HandleJump();
-                }
-
-                return;
+                HandleJump();
             }
 
-            HandleJump();
+            return;
         }
+
+        var fallingDamageReceiver = hit.GetComponentInParent<FallingDamageReceiver>();
+
+        if (fallingDamageReceiver != null)
+        {
+            fallingDamageReceiver.ReceiveFallingDamage(_stompDamage);
+            HandleJump();
+            return;
+        }
+
+        HandleJump();
     }
 
     private void HandleGravity()
@@ -192,11 +224,8 @@ public class Player : MonoBehaviour
         return _mainCamera.orthographicSize * _mainCamera.aspect;
     }
 
-    private void Die()
+    private void HandleDeath()
     {
-        if (_isDead) return;
-        _isDead = true;
-        Debug.Log("Гравець помер!");
         OnPlayerDied?.Invoke();
     }
 }

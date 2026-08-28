@@ -395,12 +395,12 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.54962474}
-  m_Size: {x: 0.69232786, y: 1.2092494}
+  m_Offset: {x: 0, y: 0.56782764}
+  m_Size: {x: 0.69232786, y: 1.1728436}
   m_Direction: 0
 --- !u!1 &508687305
 GameObject:
@@ -628,6 +628,7 @@ GameObject:
   m_Component:
   - component: {fileID: 550292074}
   - component: {fileID: 550292075}
+  - component: {fileID: 550292077}
   - component: {fileID: 550292076}
   m_Layer: 0
   m_Name: Player
@@ -645,7 +646,7 @@ Transform:
   m_GameObject: {fileID: 550292071}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.062, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -697,6 +698,7 @@ MonoBehaviour:
   _groundCheck: {fileID: 858890772}
   _capsuleCollider2D: {fileID: 454758996}
   _playerSFX: {fileID: 1540989564}
+  _stompDamage: 1
   _jumpPower: 18
   _movementSpeed: 10
   _gravityAcceleration: 30
@@ -705,6 +707,19 @@ MonoBehaviour:
   _groundLayer:
     serializedVersion: 2
     m_Bits: 256
+--- !u!114 &550292077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550292071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86206b989a304f04ebfa6d35ad4f31d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Health
+  _maxHealth: 3
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,6 +1120,60 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1314722433
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1314722434}
+  - component: {fileID: 1314722435}
+  m_Layer: 0
+  m_Name: EnemySpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1314722434
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314722433}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1314722435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314722433}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a95e4cc51a5a3694fa5f4ce0ba0afa93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
+  _enemySpawnSettings:
+  - Prefab: {fileID: 3559867263665764890, guid: 462029e8ed292c8449db12fd15a2d96e, type: 3}
+    Weight: 1
+  - Prefab: {fileID: 6915724797380883362, guid: 27cbc7da2fe439440b2ce8e8bb161e34, type: 3}
+    Weight: 1
+  _offsetFromScreenBounds: 2
+  _offsetEnemySpawnsOffScreen: 2
+  _minVerticalEnemyDistance: 2
+  _enemySpawnInterval: 5
+  _maxEnemyActiveAtTheSameTime: 3
 --- !u!1 &1375911173
 GameObject:
   m_ObjectHideFlags: 0
@@ -1270,7 +1339,7 @@ Transform:
   m_GameObject: {fileID: 1540989562}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5113, y: -1.61226, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1714,7 +1783,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 2
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7718173357589714328, guid: d42739093d265bb429aa3667b6c4514b, type: 3}
+  m_Sprite: {fileID: -4093423248750556858, guid: d56fe010fafb8324bae309e9bde270c1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1774,3 +1843,4 @@ SceneRoots:
   - {fileID: 638562516}
   - {fileID: 1742732984}
   - {fileID: 1294889860}
+  - {fileID: 1314722434}
