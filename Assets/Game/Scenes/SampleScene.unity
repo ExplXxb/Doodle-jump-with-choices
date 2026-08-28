@@ -632,6 +632,7 @@ GameObject:
   - component: {fileID: 550292076}
   - component: {fileID: 550292078}
   - component: {fileID: 550292079}
+  - component: {fileID: 550292080}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -721,7 +722,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86206b989a304f04ebfa6d35ad4f31d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Health
-  _maxHealth: 3
+  _maxHealth: 1
 --- !u!114 &550292078
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -756,6 +757,24 @@ MonoBehaviour:
   _playerSFX: {fileID: 1540989564}
   _blinkInterval: 0.08
   _blinkDuration: 1
+--- !u!114 &550292080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550292071}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62ce63281b9cb7546a8cc2266a08eda0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDeathHandler
+  _deathVFXPrefabs:
+  - {fileID: 8207548161419927570, guid: a9744168f959483429e7eb370435c703, type: 3}
+  _playerSFX: {fileID: 1540989564}
+  _playerSpriteRenderer: {fileID: 1988247970}
+  _timeSlowingStep: 0.02
+  _timeSlowingInterval: 0.01
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0

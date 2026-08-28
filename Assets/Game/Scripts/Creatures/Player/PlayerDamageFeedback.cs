@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerDamageFeedback : MonoBehaviour
 {
+    private const string HIT = "Hit";
+
     [SerializeField] private Health _health;
     [SerializeField] private SpriteRenderer _spriteRenderer;
     [SerializeField] private PlayerSFX _playerSFX;
@@ -37,7 +39,7 @@ public class PlayerDamageFeedback : MonoBehaviour
 
     private void HandleTakeDamage(DamageInfo damageInfo)
     {
-        _playerSFX.PlaySound("Hit");
+        _playerSFX.PlaySound(HIT);
 
         if (_blinkRoutine != null)
             StopCoroutine(_blinkRoutine);
