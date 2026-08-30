@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,12 +8,17 @@ public class PlayerDeathHandler : MonoBehaviour
     private const string DEATH = "Death";
     private const float TIME_SCALE_EPSILON = 0.001f;
 
+    public event Action OnDeathUIStart;
+
     [SerializeField] private List<GameObject> _deathVFXPrefabs;
     [SerializeField] private PlayerSFX _playerSFX;
     [SerializeField] private SpriteRenderer _playerSpriteRenderer;
 
     [SerializeField] private float _timeSlowingStep = 0.05f;
     [SerializeField] private float _timeSlowingInterval = 0.05f;
+
+    [SerializeField, Min(0f)]
+    private float _deathUIStartDelay = 0.2f;
 
     private Health _health;
 
@@ -45,9 +51,18 @@ public class PlayerDeathHandler : MonoBehaviour
             Instantiate(deathVFX, transform.position, transform.rotation);
         }
 
+        _playerSpriteRenderer.gameObject.SetActive(false);
+
+        StartCoroutine(DeathSequenceRoutine());
+    }
+
+    private IEnumerator DeathSequenceRoutine()
+    {
         StartCoroutine(DeathTimeFreezeRoutine());
 
-        _playerSpriteRenderer.gameObject.SetActive(false);
+        yield return new WaitForSecondsRealtime(_deathUIStartDelay);
+
+        OnDeathUIStart?.Invoke();
     }
 
     private IEnumerator DeathTimeFreezeRoutine()
