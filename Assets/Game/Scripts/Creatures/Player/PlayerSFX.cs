@@ -2,14 +2,6 @@ using UnityEngine;
 
 public class PlayerSFX : MonoBehaviour
 {
-    [System.Serializable]
-    public struct SoundEffect
-    {
-        public string actionName;
-        public AudioClip[] clips;
-        [Range(0f, 1f)] public float volume;
-    }
-
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private SoundEffect[] _soundEffects;
 

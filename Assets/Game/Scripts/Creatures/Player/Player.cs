@@ -40,6 +40,7 @@ public class Player : MonoBehaviour
     private PlayerHitReaction _hitReaction;
 
     public bool IsFalling { get; private set; }
+    public bool IsFlying { get; private set; }
     public bool IsDead => _health.IsDead;
     public Vector2 GetInputVector() => _inputVector;
     public Vector2 GetGroundCheckPosition() => _groundCheck.position;
@@ -190,10 +191,52 @@ public class Player : MonoBehaviour
         _rigidbody.MovePosition(_rigidbody.position + horizontalMovement + verticalMovement + knockback);
     }
 
+    private void PerformJump(float jumpMultiplier)
+    {
+        if (_flyingCoroutine != null)
+            return;
+
+        _verticalSpeed = _jumpPower * jumpMultiplier;
+
+        OnStartJumping?.Invoke();
+    }
+
+    private Coroutine _flyingCoroutine = null;
+
+    public void PerformFly(float flyingTime, float flyingSpeedMultiplier)
+    {
+        if (_flyingCoroutine != null)
+        {
+            StopCoroutine(_flyingCoroutine);
+            _flyingCoroutine = null;
+        }
+
+        IsFlying = true;
+            
+        PerformJump(flyingSpeedMultiplier);
+
+        _flyingCoroutine = StartCoroutine(FlyingRoutine(flyingTime));
+    }
+
+    private IEnumerator FlyingRoutine(float flyingTime)
+    {
+        float defaultGravityAcceleration = _gravityAcceleration;
+        _gravityAcceleration = 0.0f;
+
+        yield return new WaitForSeconds(flyingTime);
+
+        _gravityAcceleration = defaultGravityAcceleration;
+        _flyingCoroutine = null;
+    }
+
+    public void PerformPickupJump(float jumpMultiplier)
+    {
+        PerformJump(jumpMultiplier);
+    }
+
     private void HandleJump()
     {
-        _verticalSpeed = _jumpPower;
-        OnStartJumping?.Invoke();
+        PerformJump(1.0f);
         _playerSFX.PlaySound(JUMP);
     }
 
