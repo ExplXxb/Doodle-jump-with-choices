@@ -5,6 +5,8 @@ using UnityEngine;
 [SelectionBase]
 public class Player : MonoBehaviour
 {
+    private const string JUMP = "Jump";
+
     public static Player Instance { get; private set; }
 
     public event Action OnStartFalling;
@@ -192,7 +194,7 @@ public class Player : MonoBehaviour
     {
         _verticalSpeed = _jumpPower;
         OnStartJumping?.Invoke();
-        _playerSFX.PlaySound("Jump");
+        _playerSFX.PlaySound(JUMP);
     }
 
     private void TryUpdateMaxHeight()
