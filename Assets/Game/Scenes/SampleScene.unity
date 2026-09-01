@@ -620,11 +620,11 @@ MonoBehaviour:
   _mainCamera: {fileID: 519420031}
   _pickupOptions:
   - Prefab: {fileID: 5047699314836262805, guid: a6bb735bd58562849969637e38be7d48, type: 3}
-    BaseWeight: 0
+    BaseWeight: 65
   - Prefab: {fileID: 5047699314836262805, guid: 027dde0093d55dd48b892033af28d130, type: 3}
-    BaseWeight: 0
+    BaseWeight: 30
   - Prefab: {fileID: 1094758165116785532, guid: dc54f9d39ffb8aa46bb384074ee4829e, type: 3}
-    BaseWeight: 10
+    BaseWeight: 5
   _targetPickupsPerScreen: 0.4
   _localSpawnOffset: {x: 0, y: 1.5, z: 0}
 --- !u!1 &508687305
@@ -2300,7 +2300,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -93286577
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: -4093423248750556858, guid: d56fe010fafb8324bae309e9bde270c1, type: 3}

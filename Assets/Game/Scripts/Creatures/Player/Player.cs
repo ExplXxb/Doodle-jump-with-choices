@@ -6,6 +6,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private const string JUMP = "Jump";
+    private const float WRAP_SAFETY_MARGIN = 0.01f;
 
     public static Player Instance { get; private set; }
 
@@ -273,8 +274,8 @@ public class Player : MonoBehaviour
     private void WrapAroundHorizontally()
     {
         float newX = transform.position.x > _mainCamera.transform.position.x
-            ? _mainCamera.transform.position.x - GetCameraHalfWidth()
-            : _mainCamera.transform.position.x + GetCameraHalfWidth();
+        ? _mainCamera.transform.position.x - GetCameraHalfWidth() + WRAP_SAFETY_MARGIN
+        : _mainCamera.transform.position.x + GetCameraHalfWidth() - WRAP_SAFETY_MARGIN;
 
         _rigidbody.position = new Vector2(newX, _rigidbody.position.y);
     }

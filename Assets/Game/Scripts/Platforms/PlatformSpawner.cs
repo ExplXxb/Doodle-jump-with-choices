@@ -14,11 +14,15 @@ public class PlatformSpawner : MonoBehaviour
     private Dictionary<PlatformSpawnSettings, Queue<GameObject>> _platformPools = new Dictionary<PlatformSpawnSettings, Queue<GameObject>>();
     private Dictionary<GameObject, PlatformSpawnSettings> _activePlatforms = new Dictionary<GameObject, PlatformSpawnSettings>();
 
+    private List<GameObject> _activePlatformsList = new List<GameObject>();
+    private List<PlatformSpawnSettings> _reliablePlatformsCache = new List<PlatformSpawnSettings>();
+
     private float _lastSpawnY;
     private float _lastReliablePlatformY;
     private float _lastSpawnX;
 
     private GenerationZone _сurrentGenerationZone => GameSettings.Instance.CurrentGenerationZone;
+    private GenerationZone _previousZone;
 
     private void Awake()
     {
@@ -36,10 +40,18 @@ public class PlatformSpawner : MonoBehaviour
         _lastReliablePlatformY = _lastSpawnY;
 
         _lastSpawnX = _mainCamera.ViewportToWorldPoint(new Vector3(0.5f, 0, 0)).x;
+
+        UpdateReliablePlatformsCache();
     }
 
     private void Update()
     {
+        if (_сurrentGenerationZone != _previousZone)
+        {
+            UpdateReliablePlatformsCache();
+        }
+
+
         float screenTopY = _mainCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y;
 
         while (_lastSpawnY < screenTopY + _screenOffsetY + _сurrentGenerationZone.MaxVerticalPlatformDistance)
@@ -58,6 +70,22 @@ public class PlatformSpawner : MonoBehaviour
         }
     }
 
+    private void UpdateReliablePlatformsCache()
+    {
+        _previousZone = _сurrentGenerationZone;
+        _reliablePlatformsCache.Clear();
+
+        if (_сurrentGenerationZone == null || _сurrentGenerationZone.Platforms == null) return;
+
+        for (int i = 0; i < _сurrentGenerationZone.Platforms.Count; i++)
+        {
+            if (_сurrentGenerationZone.Platforms[i].IsReliable)
+            {
+                _reliablePlatformsCache.Add(_сurrentGenerationZone.Platforms[i]);
+            }
+        }
+    }
+
     public void GenerateNextPlatform()
     {
         var currentZone = _сurrentGenerationZone;
@@ -72,10 +100,8 @@ public class PlatformSpawner : MonoBehaviour
         {
             _lastSpawnY = _lastReliablePlatformY + maxZoneDistance;
 
-            var reliableOptions = availableSettings.FindAll(s => s.IsReliable);
-
-            chosenSettings = reliableOptions.Count > 0
-                ? GetRandomSettingsByWeight(reliableOptions)
+            chosenSettings = _reliablePlatformsCache.Count > 0
+                ? GetRandomSettingsByWeight(_reliablePlatformsCache)
                 : GetRandomSettingsByWeight(availableSettings);
         }
         else
@@ -132,6 +158,7 @@ public class PlatformSpawner : MonoBehaviour
         platform.SetActive(true);
 
         _activePlatforms.Add(platform, chosenSettings);
+        _activePlatformsList.Add(platform);
 
         PickupSpawner.Instance.TrySpawnPickupOnPlatform(platform);
     }
@@ -162,9 +189,9 @@ public class PlatformSpawner : MonoBehaviour
         float screenBottomY = _mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).y;
         var platformsToCheck = new List<GameObject>(_activePlatforms.Keys);
 
-        for (int i = platformsToCheck.Count - 1; i >= 0; i--)
+        for (int i = _activePlatformsList.Count - 1; i >= 0; i--)
         {
-            GameObject platform = platformsToCheck[i];
+            GameObject platform = _activePlatformsList[i];
 
             if (platform.transform.position.y < screenBottomY)
             {
@@ -193,6 +220,7 @@ public class PlatformSpawner : MonoBehaviour
             }
 
             _activePlatforms.Remove(platform);
+            _activePlatformsList.Remove(platform);
         }
         else
         {
