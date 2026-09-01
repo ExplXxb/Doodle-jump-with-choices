@@ -14,7 +14,7 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 0adb23a515a726c48be850fb300e7b5f, type: 3}
     - target: {fileID: 1094758165116785532, guid: adc7dfda5564d0b4a8ee70382221de57, type: 3}
       propertyPath: m_Name
-      value: FishHighJump2
+      value: FishHighJump1.7
       objectReference: {fileID: 0}
     - target: {fileID: 1224235641576709258, guid: adc7dfda5564d0b4a8ee70382221de57, type: 3}
       propertyPath: m_Sprite
@@ -59,6 +59,10 @@ PrefabInstance:
     - target: {fileID: 4136164419089241781, guid: adc7dfda5564d0b4a8ee70382221de57, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8159963580969868172, guid: adc7dfda5564d0b4a8ee70382221de57, type: 3}
+      propertyPath: _jumpMultiplier
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -131,7 +131,8 @@ MonoBehaviour:
   _pickupDirection: 0
   _flySpeedMultiplier: 0.7
   _flyTime: 5
-  _pickupSFX: {fileID: 388390909757055400}
+  _flyingSound: {fileID: 8300000, guid: e1e573d83d6c9274382c13da4b1794b7, type: 3}
+  _soundVolume: 0.3
 --- !u!1 &2588746917389654750
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,7 +181,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

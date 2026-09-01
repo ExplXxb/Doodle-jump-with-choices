@@ -12,7 +12,6 @@ public class Player : MonoBehaviour
     public event Action OnStartFalling;
     public event Action OnStartJumping;
     public event Action<float> OnMaxHeightChanged;
-    public event Action OnPlayerDied;
 
     [Header("Drag'n'drop")]
     [SerializeField] private Transform _groundCheck;
@@ -38,6 +37,7 @@ public class Player : MonoBehaviour
     private float _maxHeight = 0f;
     private Health _health;
     private PlayerHitReaction _hitReaction;
+    private float _defaultGravityAcceleration;
 
     public bool IsFalling { get; private set; }
     public bool IsFlying { get; private set; }
@@ -73,6 +73,8 @@ public class Player : MonoBehaviour
         }
 
         _mainCamera = Camera.main;
+
+        _defaultGravityAcceleration = _gravityAcceleration;
     }
 
     private void OnEnable()
@@ -203,12 +205,17 @@ public class Player : MonoBehaviour
 
     private Coroutine _flyingCoroutine = null;
 
-    public void PerformFly(float flyingTime, float flyingSpeedMultiplier)
+    public void PerformFly(float flyingTime, float flyingSpeedMultiplier, AudioClip flyingSound = null, float soundVolume = 1.0f)
     {
         if (_flyingCoroutine != null)
         {
             StopCoroutine(_flyingCoroutine);
             _flyingCoroutine = null;
+        }
+
+        if (flyingSound != null)
+        {
+            _playerSFX.StartPlayLoopingSound(flyingSound, soundVolume);
         }
 
         IsFlying = true;
@@ -220,13 +227,15 @@ public class Player : MonoBehaviour
 
     private IEnumerator FlyingRoutine(float flyingTime)
     {
-        float defaultGravityAcceleration = _gravityAcceleration;
         _gravityAcceleration = 0.0f;
 
         yield return new WaitForSeconds(flyingTime);
 
-        _gravityAcceleration = defaultGravityAcceleration;
+        _gravityAcceleration = _defaultGravityAcceleration;
         _flyingCoroutine = null;
+        IsFlying = false;
+
+        _playerSFX.StopPlayLoopingSound();
     }
 
     public void PerformPickupJump(float jumpMultiplier)
@@ -288,6 +297,14 @@ public class Player : MonoBehaviour
 
     private void HandleDeath()
     {
-        OnPlayerDied?.Invoke();
+        if (_flyingCoroutine != null)
+        {
+            StopCoroutine(_flyingCoroutine);
+            _flyingCoroutine = null;
+
+            IsFlying = false;
+            _gravityAcceleration = _defaultGravityAcceleration;
+            _playerSFX.StopPlayLoopingSound();
+        }
     }
 }

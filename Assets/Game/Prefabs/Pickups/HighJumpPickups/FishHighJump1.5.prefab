@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1094758165116785532, guid: adc7dfda5564d0b4a8ee70382221de57, type: 3}
       propertyPath: m_Name
-      value: FishHighJump1.5
+      value: FishHighJump1.3
       objectReference: {fileID: 0}
     - target: {fileID: 4136164419089241781, guid: adc7dfda5564d0b4a8ee70382221de57, type: 3}
       propertyPath: m_LocalPosition.x

@@ -17,6 +17,19 @@ public class PlayerSFX : MonoBehaviour
                 return;
             }
         }
-        Debug.LogWarning($"Звук для действия '{actionName}' не найден!");
+        Debug.LogWarning($"Звук для дії '{actionName}' не знайдено!");
+    }
+
+    public void StartPlayLoopingSound(AudioClip audioClip, float volume)
+    {
+        _audioSource.loop = true;
+        _audioSource.clip = audioClip;
+        _audioSource.volume = volume;
+        _audioSource.Play();
+    }
+
+    public void StopPlayLoopingSound()
+    {
+        _audioSource.Stop();
     }
 }

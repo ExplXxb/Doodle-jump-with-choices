@@ -13,4 +13,7 @@ MonoBehaviour:
   m_Name: GenerationSettings
   m_EditorClassIdentifier: Assembly-CSharp::GenerationSettings
   _zones:
+  - {fileID: 11400000, guid: 627674dcdd5ee7e40b14ff3f75f029ca, type: 2}
+  - {fileID: 11400000, guid: 054ee9bd835ca3440a9060a97c6e16e3, type: 2}
+  - {fileID: 11400000, guid: 841d0a0214706e94c8ac94596ea1fe2f, type: 2}
   - {fileID: 11400000, guid: b64cb23a0ae9057468910c1af3aed73c, type: 2}
