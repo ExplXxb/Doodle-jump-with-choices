@@ -2,14 +2,6 @@ using UnityEngine;
 
 public class PlayerSFX : MonoBehaviour
 {
-    [System.Serializable]
-    public struct SoundEffect
-    {
-        public string actionName;
-        public AudioClip[] clips;
-        [Range(0f, 1f)] public float volume;
-    }
-
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private SoundEffect[] _soundEffects;
 
@@ -25,6 +17,19 @@ public class PlayerSFX : MonoBehaviour
                 return;
             }
         }
-        Debug.LogWarning($"Звук для действия '{actionName}' не найден!");
+        Debug.LogWarning($"Звук для дії '{actionName}' не знайдено!");
+    }
+
+    public void StartPlayLoopingSound(AudioClip audioClip, float volume)
+    {
+        _audioSource.loop = true;
+        _audioSource.clip = audioClip;
+        _audioSource.volume = volume;
+        _audioSource.Play();
+    }
+
+    public void StopPlayLoopingSound()
+    {
+        _audioSource.Stop();
     }
 }

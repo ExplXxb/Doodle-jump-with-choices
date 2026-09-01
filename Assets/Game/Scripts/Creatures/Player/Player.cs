@@ -12,7 +12,6 @@ public class Player : MonoBehaviour
     public event Action OnStartFalling;
     public event Action OnStartJumping;
     public event Action<float> OnMaxHeightChanged;
-    public event Action OnPlayerDied;
 
     [Header("Drag'n'drop")]
     [SerializeField] private Transform _groundCheck;
@@ -38,8 +37,10 @@ public class Player : MonoBehaviour
     private float _maxHeight = 0f;
     private Health _health;
     private PlayerHitReaction _hitReaction;
+    private float _defaultGravityAcceleration;
 
     public bool IsFalling { get; private set; }
+    public bool IsFlying { get; private set; }
     public bool IsDead => _health.IsDead;
     public Vector2 GetInputVector() => _inputVector;
     public Vector2 GetGroundCheckPosition() => _groundCheck.position;
@@ -72,6 +73,8 @@ public class Player : MonoBehaviour
         }
 
         _mainCamera = Camera.main;
+
+        _defaultGravityAcceleration = _gravityAcceleration;
     }
 
     private void OnEnable()
@@ -190,10 +193,59 @@ public class Player : MonoBehaviour
         _rigidbody.MovePosition(_rigidbody.position + horizontalMovement + verticalMovement + knockback);
     }
 
+    private void PerformJump(float jumpMultiplier)
+    {
+        if (_flyingCoroutine != null)
+            return;
+
+        _verticalSpeed = _jumpPower * jumpMultiplier;
+
+        OnStartJumping?.Invoke();
+    }
+
+    private Coroutine _flyingCoroutine = null;
+
+    public void PerformFly(float flyingTime, float flyingSpeedMultiplier, AudioClip flyingSound = null, float soundVolume = 1.0f)
+    {
+        if (_flyingCoroutine != null)
+        {
+            StopCoroutine(_flyingCoroutine);
+            _flyingCoroutine = null;
+        }
+
+        if (flyingSound != null)
+        {
+            _playerSFX.StartPlayLoopingSound(flyingSound, soundVolume);
+        }
+
+        IsFlying = true;
+            
+        PerformJump(flyingSpeedMultiplier);
+
+        _flyingCoroutine = StartCoroutine(FlyingRoutine(flyingTime));
+    }
+
+    private IEnumerator FlyingRoutine(float flyingTime)
+    {
+        _gravityAcceleration = 0.0f;
+
+        yield return new WaitForSeconds(flyingTime);
+
+        _gravityAcceleration = _defaultGravityAcceleration;
+        _flyingCoroutine = null;
+        IsFlying = false;
+
+        _playerSFX.StopPlayLoopingSound();
+    }
+
+    public void PerformPickupJump(float jumpMultiplier)
+    {
+        PerformJump(jumpMultiplier);
+    }
+
     private void HandleJump()
     {
-        _verticalSpeed = _jumpPower;
-        OnStartJumping?.Invoke();
+        PerformJump(1.0f);
         _playerSFX.PlaySound(JUMP);
     }
 
@@ -245,6 +297,14 @@ public class Player : MonoBehaviour
 
     private void HandleDeath()
     {
-        OnPlayerDied?.Invoke();
+        if (_flyingCoroutine != null)
+        {
+            StopCoroutine(_flyingCoroutine);
+            _flyingCoroutine = null;
+
+            IsFlying = false;
+            _gravityAcceleration = _defaultGravityAcceleration;
+            _playerSFX.StopPlayLoopingSound();
+        }
     }
 }

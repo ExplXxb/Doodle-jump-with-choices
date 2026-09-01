@@ -9,6 +9,7 @@ public class PlatformSpawner : MonoBehaviour
     [SerializeField] private Camera _mainCamera;
 
     [SerializeField] private float _screenPaddingX = 1f;
+    [SerializeField] private float _screenOffsetY = 1f;
 
     private Dictionary<PlatformSpawnSettings, Queue<GameObject>> _platformPools = new Dictionary<PlatformSpawnSettings, Queue<GameObject>>();
     private Dictionary<GameObject, PlatformSpawnSettings> _activePlatforms = new Dictionary<GameObject, PlatformSpawnSettings>();
@@ -41,7 +42,7 @@ public class PlatformSpawner : MonoBehaviour
     {
         float screenTopY = _mainCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y;
 
-        while (_lastSpawnY < screenTopY + _сurrentGenerationZone.MaxVerticalPlatformDistance)
+        while (_lastSpawnY < screenTopY + _screenOffsetY + _сurrentGenerationZone.MaxVerticalPlatformDistance)
         {
             GenerateNextPlatform();
         }
@@ -131,6 +132,8 @@ public class PlatformSpawner : MonoBehaviour
         platform.SetActive(true);
 
         _activePlatforms.Add(platform, chosenSettings);
+
+        PickupSpawner.Instance.TrySpawnPickupOnPlatform(platform);
     }
 
     private PlatformSpawnSettings GetRandomSettingsByWeight(List<PlatformSpawnSettings> availableSettings)
@@ -174,6 +177,8 @@ public class PlatformSpawner : MonoBehaviour
     {
         if (_activePlatforms.TryGetValue(platform, out var originalSettings))
         {
+            PickupSpawner.Instance.DespawnPickupForPlatform(platform);
+
             platform.SetActive(false);
 
             if (_platformPools.TryGetValue(originalSettings, out var queue))
