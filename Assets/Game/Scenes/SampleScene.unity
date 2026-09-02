@@ -1737,7 +1737,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c694b75138a01c54da029075158b14ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameSettings
-  _generationSettings: {fileID: 11400000, guid: 826ea34f0d8d24c4597cf39274f1e913, type: 2}
+  _baseGenerationParametrs: {fileID: 11400000, guid: 627674dcdd5ee7e40b14ff3f75f029ca, type: 2}
   _scoreSystem: {fileID: 332163516}
 --- !u!4 &1294889860
 Transform:
