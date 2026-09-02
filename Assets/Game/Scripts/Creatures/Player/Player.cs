@@ -20,11 +20,7 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerSFX _playerSFX;
 
     [Header("General")]
-    [SerializeField] private float _stompDamage = 1.0f;
-    [SerializeField] private float _jumpPower = 10.0f;
-    [SerializeField] private float _movementSpeed = 4f;
-    [SerializeField] private float _gravityAcceleration = 9.81f;
-    [SerializeField] private float _maxFallSpeed = 20f;
+    [SerializeField] private float _maxFallSpeed = 1000f;
 
     [Header("Ground Checker")]
     [SerializeField] private float _groundCheckRadius = 0.1f;
@@ -38,7 +34,6 @@ public class Player : MonoBehaviour
     private float _maxHeight = 0f;
     private Health _health;
     private PlayerHitReaction _hitReaction;
-    private float _defaultGravityAcceleration;
 
     public bool IsFalling { get; private set; }
     public bool IsFlying { get; private set; }
@@ -74,8 +69,6 @@ public class Player : MonoBehaviour
         }
 
         _mainCamera = Camera.main;
-
-        _defaultGravityAcceleration = _gravityAcceleration;
     }
 
     private void OnEnable()
@@ -92,7 +85,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        _verticalSpeed = _jumpPower;
+        _verticalSpeed = PlayerStats.Instance.JumpPower;
     }
 
     private void Update()
@@ -117,7 +110,10 @@ public class Player : MonoBehaviour
         if (IsDead) return;
 
         _hitReaction.Tick(Time.fixedDeltaTime);
-        HandleGravity();
+
+        if (IsFlying == false)
+            HandleGravity();
+
         HandleMovement();
         TryUpdateMaxHeight();
     }
@@ -168,7 +164,7 @@ public class Player : MonoBehaviour
 
         if (fallingDamageReceiver != null)
         {
-            fallingDamageReceiver.ReceiveFallingDamage(_stompDamage, transform.position);
+            fallingDamageReceiver.ReceiveFallingDamage(PlayerStats.Instance.StompDamage, transform.position);
             HandleJump();
             return;
         }
@@ -178,7 +174,7 @@ public class Player : MonoBehaviour
 
     private void HandleGravity()
     {
-        _verticalSpeed -= _gravityAcceleration * Time.fixedDeltaTime;
+        _verticalSpeed -= PlayerStats.Instance.GravityAcceleration * Time.fixedDeltaTime;
         _verticalSpeed = Mathf.Max(_verticalSpeed, -_maxFallSpeed);
 
         CheckGround();
@@ -187,7 +183,7 @@ public class Player : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector2 horizontalMovement = _inputVector * _hitReaction.InputMultiplier * _movementSpeed * Time.fixedDeltaTime;
+        Vector2 horizontalMovement = _inputVector * _hitReaction.InputMultiplier * PlayerStats.Instance.MovementSpeed * Time.fixedDeltaTime;
         Vector2 verticalMovement = new Vector2(0f, _verticalSpeed * Time.fixedDeltaTime);
         Vector2 knockback = _hitReaction.KnockbackDisplacement;
 
@@ -199,7 +195,7 @@ public class Player : MonoBehaviour
         if (_flyingCoroutine != null)
             return;
 
-        _verticalSpeed = _jumpPower * jumpMultiplier;
+        _verticalSpeed = PlayerStats.Instance.JumpPower * jumpMultiplier;
 
         OnStartJumping?.Invoke();
     }
@@ -228,11 +224,8 @@ public class Player : MonoBehaviour
 
     private IEnumerator FlyingRoutine(float flyingTime)
     {
-        _gravityAcceleration = 0.0f;
-
         yield return new WaitForSeconds(flyingTime);
 
-        _gravityAcceleration = _defaultGravityAcceleration;
         _flyingCoroutine = null;
         IsFlying = false;
 
@@ -304,7 +297,6 @@ public class Player : MonoBehaviour
             _flyingCoroutine = null;
 
             IsFlying = false;
-            _gravityAcceleration = _defaultGravityAcceleration;
             _playerSFX.StopPlayLoopingSound();
         }
     }
