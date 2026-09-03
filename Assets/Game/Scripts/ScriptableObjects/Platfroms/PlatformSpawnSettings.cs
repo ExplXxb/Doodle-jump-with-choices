@@ -16,11 +16,4 @@ public class PlatformSpawnSettings
             Weight = this.Weight
         };
     }
-
-    public PlatformSpawnSettings CloneWithWeight(float newWeight)
-    {
-        PlatformSpawnSettings clone = Clone();
-        clone.Weight = newWeight;
-        return clone;
-    }
 }

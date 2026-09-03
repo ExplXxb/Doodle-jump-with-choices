@@ -21,7 +21,7 @@ public class PlatformSpawner : MonoBehaviour
     private float _lastReliablePlatformY;
     private float _lastSpawnX;
 
-    private GenerationSettings _сurrentGenerationZone => GameSettings.Instance.CurrentGenerationParametrs;
+    private GenerationSettings _сurrentGenerationZone => GameSettings.Instance.CurrentGenerationSettings;
     private GenerationSettings _previousZone;
 
     private void Awake()

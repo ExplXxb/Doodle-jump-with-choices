@@ -1,16 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-
 public class GameSettings : MonoBehaviour
 {
     public static GameSettings Instance { get; private set; }
 
     [SerializeField] private GenerationSettings _baseGenerationSettings;
 
+    private List<GenerationSettingsEffectSO> _activeEffects = new List<GenerationSettingsEffectSO>();
     private GenerationSettings _currentGenerationSettings;
-
-    public GenerationSettings CurrentGenerationParametrs => _currentGenerationSettings;
+    public GenerationSettings CurrentGenerationSettings => _currentGenerationSettings;
 
     private void Awake()
     {
@@ -24,14 +22,31 @@ public class GameSettings : MonoBehaviour
 
     private void Start()
     {
-        _currentGenerationSettings = _baseGenerationSettings;
+        RecalculateGenerationSettings();
     }
 
-    public void ApplyCardChoice(PlatformSpawnSettings settings, float weightDelta)
+    public void AddEffect(GenerationSettingsEffectSO effect)
     {
-        if (weightDelta >= 0f)
-            _currentGenerationSettings.TryAddPlatformWeight(settings, weightDelta);
-        else
-            _currentGenerationSettings.TryRemovePlatformWeight(settings.Prefab, -weightDelta);
+        _activeEffects.Add(effect);
+        RecalculateGenerationSettings();
+    }
+
+    public void RemoveEffect(GenerationSettingsEffectSO effect)
+    {
+        _activeEffects.Remove(effect);
+        RecalculateGenerationSettings();
+    }
+
+    private void RecalculateGenerationSettings()
+    {
+        GenerationSettings result = _baseGenerationSettings.Clone();
+        foreach (var effect in _activeEffects)
+        {
+            foreach (var settings in effect.PlatformSpawnSettings)
+            {
+                result.ApplyWeightDelta(settings);
+            }
+        }
+        _currentGenerationSettings = result;
     }
 }

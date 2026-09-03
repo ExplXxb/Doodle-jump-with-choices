@@ -46,34 +46,17 @@ public class GenerationSettings : ScriptableObject
         return null;
     }
 
-    public void TryAddPlatformWeight(PlatformSpawnSettings settings, float addWeight)
+    public void ApplyWeightDelta(PlatformSpawnSettings settings)
     {
         PlatformSpawnSettings existing = GetPlatformSettingsByPrefab(settings.Prefab);
         if (existing != null)
         {
-            existing.Weight += addWeight;
+            existing.Weight = Mathf.Max(0f, existing.Weight + settings.Weight);
             return;
         }
-        _platforms.Add(settings.CloneWithWeight(addWeight));
-    }
-
-    public void TryRemovePlatformWeight(GameObject platformPrefab, float removeWeight)
-    {
-        PlatformSpawnSettings existing = GetPlatformSettingsByPrefab(platformPrefab);
-        if (existing == null)
+        if (settings.Weight > 0f)
         {
-            Debug.Log("Платформу для зменшення ваги не знайдено в списку.");
-            return;
-        }
-
-        if (existing.Weight - removeWeight > 0f)
-        {
-            existing.Weight -= removeWeight;
-        }
-        else
-        {
-            Debug.Log($"Вага платформи стала б меншою за 0 на {removeWeight - existing.Weight}, тому платформу видалено.");
-            _platforms.Remove(existing);
+            _platforms.Add(settings.Clone());
         }
     }
 
