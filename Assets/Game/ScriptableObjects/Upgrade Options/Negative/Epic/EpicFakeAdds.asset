@@ -10,18 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ada6d433310c96947b786f33f555e63e, type: 3}
-  m_Name: SmallDefaultAdds
+  m_Name: EpicFakeAdds
   m_EditorClassIdentifier: Assembly-CSharp::GenerationSettingsEffectSO
-  _rarity: 0
+  _rarity: 2
   _intent: 1
-  _displayName: "\u041C\u0430\u043B\u0438\u0439"
-  _displayText: "\u0422\u0440\u043E\u0445\u0438 \u0437\u0431\u0456\u043B\u044C\u0448\u0443\u0454
+  _displayName: "\u041D\u0435\u0441\u043F\u0440\u0430\u0432\u0436\u043D\u0456\u0439"
+  _displayText: "\u0421\u0438\u043B\u044C\u043D\u043E \u0437\u0431\u0456\u043B\u044C\u0448\u0443\u0454
     \u0439\u043C\u043E\u0432\u0456\u0440\u043D\u0456\u0441\u0442\u044C \u043F\u043E\u044F\u0432\u0438
-    \u043C\u0430\u043B\u0438\u0445 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C"
+    \u0456\u043B\u044E\u0437\u043E\u0440\u043D\u0438\u0445 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C"
   _platformSpawnSettingsList:
-  - Prefab: {fileID: 6876007611500172789, guid: 658c2a8119e74cc46a3ba435192f16a1, type: 3}
-    IsReliable: 1
-    Weight: 5
-  - Prefab: {fileID: 8389332076042822207, guid: 7b3f5e63a88c5c442b70f6c369d957bc, type: 3}
-    IsReliable: 1
-    Weight: -5
+  - Prefab: {fileID: 7420305994245544443, guid: 4fc880d0069f5ea4c904b548e8d5aecd, type: 3}
+    IsReliable: 0
+    Weight: 50

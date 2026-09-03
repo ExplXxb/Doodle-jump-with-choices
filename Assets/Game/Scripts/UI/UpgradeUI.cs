@@ -3,20 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public class RarityCardPrefab
+{
+    public EffectRarity CardRarity;
+    public GameObject CardPrefab;
+}
+
 public class UpgradeUI : MonoBehaviour
 {
-    [SerializeField] private GameObject _cardPrefab;
+    [SerializeField] private List<RarityCardPrefab> _cardPrefabs;
     [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private GridLayoutGroup _gridLayoutGroup;
 
-    private Stack<CardUI> _cardsPool = new Stack<CardUI>();
-    private Stack<CardUI> _activeCards = new Stack<CardUI>();
+    private Dictionary<EffectRarity, Stack<CardUI>> _cardsPool = new();
+    private Dictionary<EffectRarity, GameObject> _prefabByRarity = new();
+    private List<CardUI> _activeCards = new();
+
+    private void Awake()
+    {
+        foreach (var cardPrefab in _cardPrefabs)
+        {
+            _prefabByRarity.Add(cardPrefab.CardRarity, cardPrefab.CardPrefab);
+        }
+    }
 
     public void ShowCards(List<UpgradeCard> cards, Action<UpgradeCard> handleCardSelected)
     {
         for (int i = 0; i < cards.Count; i++)
         {
-            CardUI cardUI = GetCardFromPoolOrInstantiate();
+            CardUI cardUI = GetCardFromPoolOrInstantiate(cards[i].PositiveEffect.Rarity);
             cardUI.EnterCardValues(
                 cards[i], 
                 card => HandleCardPicked(card, handleCardSelected),
@@ -24,16 +40,26 @@ public class UpgradeUI : MonoBehaviour
                 cards[i].NegativeEffect.DisplayName, 
                 cards[i].PositiveEffect.DisplayText, 
                 cards[i].NegativeEffect.DisplayText);
-            _activeCards.Push(cardUI);
+            _activeCards.Add(cardUI);
             cardUI.gameObject.SetActive(true);
         }
     }
 
-    private CardUI GetCardFromPoolOrInstantiate()
+    private CardUI GetCardFromPoolOrInstantiate(EffectRarity rarity)
     {
-        return _cardsPool.Count > 0
-            ? _cardsPool.Pop() 
-            : Instantiate(_cardPrefab, _gridLayoutGroup.transform).GetComponent<CardUI>();
+        if (!_cardsPool.TryGetValue(rarity, out var stack))
+        {
+            stack = new Stack<CardUI>();
+            _cardsPool[rarity] = stack;
+        }
+
+        if (stack.Count > 0)
+        {
+            return stack.Pop();
+        }
+
+        var prefab = _prefabByRarity[rarity];
+        return Instantiate(prefab, _gridLayoutGroup.transform).GetComponent<CardUI>();
     }
 
     private void HandleCardPicked(UpgradeCard card, Action<UpgradeCard> handleCardSelected)
@@ -47,7 +73,12 @@ public class UpgradeUI : MonoBehaviour
         foreach (var card in _activeCards)
         {
             card.gameObject.SetActive(false);
-            _cardsPool.Push(card);
+            if (!_cardsPool.TryGetValue(card.Rarity, out var stack))
+            {
+                stack = new Stack<CardUI>();
+                _cardsPool[card.Rarity] = stack;
+            }
+            stack.Push(card);
         }
         _activeCards.Clear();
     }

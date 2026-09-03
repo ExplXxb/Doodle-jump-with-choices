@@ -14,6 +14,8 @@ public class CardUI : MonoBehaviour, IPointerClickHandler
     private UpgradeCard _upgradeCard;
     private Action<UpgradeCard> _handleCardSelected;
 
+    public EffectRarity Rarity => _upgradeCard.PositiveEffect.Rarity;
+
     private void Awake()
     {
         if (_cardNameText == null)

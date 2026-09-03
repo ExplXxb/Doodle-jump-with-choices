@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 905754de93d1fe846b4b937cc1f3c0fc, type: 3}
-  m_Name: MovementSpeedUp
+  m_Name: RareJumpPowerUp
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatEffectSO
-  _rarity: 0
+  _rarity: 1
   _intent: 0
-  _displayName: "\u0411\u0456\u0433\u0443\u043D"
+  _displayName: "\u0421\u0442\u0440\u0438\u0431\u0443\u043D"
   _displayText: "\u0413\u0440\u0430\u0432\u0435\u0446\u044C \u0441\u0442\u0430\u0454
-    \u0442\u0440\u043E\u0445\u0438 \u0448\u0432\u0438\u0434\u0448\u0438\u043C"
+    \u0432\u0438\u0449\u0435 \u0441\u0442\u0440\u0438\u0431\u0430\u0442\u0438"
   _stompDamageDelta: 0
-  _jumpPowerDelta: 0
-  _movementSpeedDelta: 1
+  _jumpPowerDelta: 4
+  _movementSpeedDelta: 0
   _gravityAccelerationDelta: 0

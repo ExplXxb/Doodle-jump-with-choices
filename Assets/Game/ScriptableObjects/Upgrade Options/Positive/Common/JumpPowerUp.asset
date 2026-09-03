@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatEffectSO
   _rarity: 0
   _intent: 0
-  _displayName: "\u0421\u0442\u0440\u0438\u0431\u0443\u043D"
+  _displayName: "\u0421\u0442\u0440\u0438\u0431\u0443\u043D\u0435\u0446\u044C"
   _displayText: "\u0413\u0440\u0430\u0432\u0435\u0446\u044C \u0441\u0442\u0430\u0454
     \u0442\u0440\u043E\u0445\u0438 \u0432\u0438\u0449\u0435 \u0441\u0442\u0440\u0438\u0431\u0430\u0442\u0438"
   _stompDamageDelta: 0
