@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,9 +17,17 @@ public class UpgradeUI : MonoBehaviour
     [SerializeField] private CanvasGroup _canvasGroup;
     [SerializeField] private GridLayoutGroup _gridLayoutGroup;
 
+    [SerializeField, Range(0f, 1f)]
+    private float _alphaTargetValue = 0.8f;
+    [SerializeField, Min(0f)]
+    private float _appearingTime = 0.5f;
+    [SerializeField, Min(0f)]
+    private float _uiInteractionDelay = 0.2f;
+
     private Dictionary<EffectRarity, Stack<CardUI>> _cardsPool = new();
     private Dictionary<EffectRarity, GameObject> _prefabByRarity = new();
     private List<CardUI> _activeCards = new();
+    private Coroutine _showUIRoutine;
 
     private void Awake()
     {
@@ -85,9 +94,9 @@ public class UpgradeUI : MonoBehaviour
 
     public void ShowUI()
     {
-        _canvasGroup.alpha = 1f;
-        _canvasGroup.interactable = true;
-        _canvasGroup.blocksRaycasts = true;
+        if (_showUIRoutine != null)
+            StopCoroutine(_showUIRoutine);
+        _showUIRoutine = StartCoroutine(ShowUIRoutine());
     }
 
     public void HideUI()
@@ -95,5 +104,33 @@ public class UpgradeUI : MonoBehaviour
         _canvasGroup.alpha = 0f;
         _canvasGroup.interactable = false;
         _canvasGroup.blocksRaycasts = false;
+    }
+
+    private IEnumerator ShowUIRoutine()
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < _appearingTime)
+        {
+            elapsedTime += Time.unscaledDeltaTime;
+
+            float progress = elapsedTime / _appearingTime;
+
+            _canvasGroup.alpha = Mathf.Lerp(
+                0f,
+                _alphaTargetValue,
+                progress
+            );
+
+            if (elapsedTime >= _appearingTime - _uiInteractionDelay)
+            {
+                _canvasGroup.interactable = true;
+                _canvasGroup.blocksRaycasts = true;
+            }
+
+            yield return null;
+        }
+
+        _canvasGroup.alpha = _alphaTargetValue;
     }
 }
