@@ -1,23 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-
 public class GameSettings : MonoBehaviour
 {
     public static GameSettings Instance { get; private set; }
 
-    [SerializeField] private GenerationSettings _generationSettings;
-    [SerializeField] private ScoreSystem _scoreSystem;
+    [SerializeField] private GenerationSettings _baseGenerationSettings;
 
-    private GenerationZone _currentGenerationZone;
-
-    public GenerationZone CurrentGenerationZone
-    {
-        get
-        {
-            return _currentGenerationZone;
-        }
-    }
+    private List<GenerationSettingsEffectSO> _activeEffects = new List<GenerationSettingsEffectSO>();
+    private GenerationSettings _currentGenerationSettings;
+    public GenerationSettings CurrentGenerationSettings => _currentGenerationSettings;
 
     private void Awake()
     {
@@ -31,77 +22,31 @@ public class GameSettings : MonoBehaviour
 
     private void Start()
     {
-        _currentGenerationZone = _generationSettings.Zones[0];
-        _currentGenerationZone = TryGetSuitableGenerationZone(_currentGenerationZone);
+        RecalculateGenerationSettings();
     }
 
-    private void Update()
+    public void AddEffect(GenerationSettingsEffectSO effect)
     {
-        if (_scoreSystem.Score < _currentGenerationZone.MinScore || _scoreSystem.Score > _currentGenerationZone.MaxScore)
-        {
-            _currentGenerationZone = TryGetSuitableGenerationZone(_currentGenerationZone);
-        }
+        _activeEffects.Add(effect);
+        RecalculateGenerationSettings();
     }
 
-    private GenerationZone TryGetSuitableGenerationZone(GenerationZone currentGenerationZone)
+    public void RemoveEffect(GenerationSettingsEffectSO effect)
     {
-        int currentScore = _scoreSystem.Score;
-        GenerationZone result = currentGenerationZone.Clone();
-
-        List<GenerationZone> suitableZones = new List<GenerationZone>();
-
-        foreach (var zone in _generationSettings.Zones)
-        {
-            if (currentScore >= zone.MinScore && currentScore <= zone.MaxScore)
-            {
-                suitableZones.Add(zone);
-            }
-        }
-
-        if (suitableZones.Count > 1)
-        {
-            result = suitableZones[Random.Range(0, suitableZones.Count)];
-        }
-        else if (suitableZones.Count == 1)
-        {
-            result = suitableZones[0];
-        }
-        else
-        {
-            return GetMostSuitableGenerationZone();
-        }
-
-        Debug.Log(result);
-        return result;
+        _activeEffects.Remove(effect);
+        RecalculateGenerationSettings();
     }
 
-    private GenerationZone GetMostSuitableGenerationZone()
+    private void RecalculateGenerationSettings()
     {
-        int currentScore = _scoreSystem.Score;
-        int minUnsuitability = int.MaxValue;
-
-        GenerationZone result = _currentGenerationZone;
-
-        foreach (var zone in _generationSettings.Zones)
+        GenerationSettings result = _baseGenerationSettings.Clone();
+        foreach (var effect in _activeEffects)
         {
-            if (currentScore < zone.MinScore)
+            foreach (var settings in effect.PlatformSpawnSettings)
             {
-                if (minUnsuitability > zone.MinScore - currentScore)
-                {
-                    minUnsuitability = zone.MinScore - currentScore;
-                    result = zone;
-                }
-            }
-            if (currentScore > zone.MaxScore)
-            {
-                if (minUnsuitability > currentScore - zone.MaxScore)
-                {
-                    minUnsuitability = currentScore - zone.MaxScore;
-                    result = zone;
-                }
+                result.ApplyWeightDelta(settings);
             }
         }
-
-        return result;
+        _currentGenerationSettings = result;
     }
 }

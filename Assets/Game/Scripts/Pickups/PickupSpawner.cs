@@ -84,7 +84,7 @@ public class PickupSpawner : MonoBehaviour
 
     private float GetChancePerPlatform()
     {
-        var zone = GameSettings.Instance.CurrentGenerationZone;
+        var zone = GameSettings.Instance.CurrentGenerationSettings;
         float avgDistance = (zone.MinVerticalPlatformDistance + zone.MaxVerticalPlatformDistance) / 2f;
 
         float bottomY = _mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).y;

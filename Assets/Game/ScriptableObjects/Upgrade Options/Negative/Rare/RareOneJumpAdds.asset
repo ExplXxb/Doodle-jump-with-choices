@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ada6d433310c96947b786f33f555e63e, type: 3}
+  m_Name: RareOneJumpAdds
+  m_EditorClassIdentifier: Assembly-CSharp::GenerationSettingsEffectSO
+  _rarity: 1
+  _intent: 1
+  _displayName: "\u0420\u0430\u0445\u0456\u0442\u043D\u0438\u0439"
+  _displayText: "\u041F\u043E\u043C\u0456\u0440\u043D\u043E \u0437\u0431\u0456\u043B\u044C\u0448\u0443\u0454
+    \u0439\u043C\u043E\u0432\u0456\u0440\u043D\u0456\u0441\u0442\u044C \u043F\u043E\u044F\u0432\u0438
+    \u043A\u0440\u0438\u0445\u043A\u0438\u0445 \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C"
+  _platformSpawnSettingsList:
+  - Prefab: {fileID: 4777791678985795034, guid: 871fd0272c2026c4bb95612d30a20b5e, type: 3}
+    IsReliable: 1
+    Weight: 12
+  - Prefab: {fileID: 8389332076042822207, guid: 7b3f5e63a88c5c442b70f6c369d957bc, type: 3}
+    IsReliable: 1
+    Weight: -12
