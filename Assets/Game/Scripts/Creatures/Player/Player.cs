@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Windows;
+using VContainer;
 
 [SelectionBase]
 public class Player : MonoBehaviour
@@ -8,7 +10,7 @@ public class Player : MonoBehaviour
     private const string JUMP = "Jump";
     private const float WRAP_SAFETY_MARGIN = 0.01f;
 
-    public static Player Instance { get; private set; }
+    public static Player Instance;
 
     public event Action OnStartFalling;
     public event Action OnStartJumping;
@@ -35,19 +37,22 @@ public class Player : MonoBehaviour
     private Health _health;
     private PlayerHitReaction _hitReaction;
 
+    private IInput _input;
+
     public bool IsFalling { get; private set; }
     public bool IsFlying { get; private set; }
     public bool IsDead => _health.IsDead;
     public Vector2 GetInputVector() => _inputVector;
     public Vector2 GetGroundCheckPosition() => _groundCheck.position;
 
+    [Inject]
+    public void Construct(IInput input)
+    {
+        _input = input;
+    }
+
     private void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
         Instance = this;
 
         _rigidbody = GetComponent<Rigidbody2D>();
@@ -102,7 +107,7 @@ public class Player : MonoBehaviour
             WrapAroundHorizontally();
         }
 
-        _inputVector = GameInput.Instance.GetMovementVector();
+        _inputVector = _input.GetMovementVector();
     }
 
     private void FixedUpdate()
@@ -116,14 +121,6 @@ public class Player : MonoBehaviour
 
         HandleMovement();
         TryUpdateMaxHeight();
-    }
-
-    private void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            Instance = null;
-        }
     }
 
     private void DetermineIsFalling()

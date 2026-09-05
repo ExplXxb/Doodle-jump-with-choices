@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ada6d433310c96947b786f33f555e63e, type: 3}
   m_Name: EpicOneJumpAdds
   m_EditorClassIdentifier: Assembly-CSharp::GenerationSettingsEffectSO
-  _rarity: 0
+  _rarity: 2
   _intent: 1
   _displayName: "\u0417\u043B\u043E\u043C\u0430\u043D\u0438\u0439"
   _displayText: "\u0421\u0438\u043B\u044C\u043D\u043E \u0437\u0431\u0456\u043B\u044C\u0448\u0443\u0454
