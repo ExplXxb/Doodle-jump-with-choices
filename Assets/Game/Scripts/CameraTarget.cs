@@ -1,18 +1,25 @@
 using UnityEngine;
+using VContainer;
 
 public class CameraTarget : MonoBehaviour
 {
-    [SerializeField] private Transform _player;
     private float _highestY;
 
-    private void Start()
+    private Transform _playerTransform;
+
+    [Inject]
+    public void Construct(Player player)
     {
-        _highestY = _player.position.y;
+        _playerTransform = player.transform;
+
+        _highestY = _playerTransform.position.y;
     }
 
     private void LateUpdate()
     {
-        _highestY = Mathf.Max(_highestY, _player.position.y);
+        if (_playerTransform == null) return;
+
+        _highestY = Mathf.Max(_highestY, _playerTransform.position.y);
         transform.position = new Vector3(transform.position.x, _highestY, transform.position.z);
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using VContainer;
 
 public class ScoreSystem : MonoBehaviour
 {
@@ -9,6 +10,15 @@ public class ScoreSystem : MonoBehaviour
     [SerializeField] private float _heightMultiplier = 10.0f;
 
     private int _score;
+
+    private Player _player;
+
+    [Inject]
+    public void Construct(Player player)
+    {
+        _player = player;
+    }
+
     public int Score
     {
         get { return _score; }
@@ -28,13 +38,13 @@ public class ScoreSystem : MonoBehaviour
 
     private void Start()
     {
-        Player.Instance.OnMaxHeightChanged += Player_OnMaxHeightChanged;
+        _player.OnMaxHeightChanged += Player_OnMaxHeightChanged;
     }
 
     private void OnDestroy()
     {
-        if (Player.Instance != null)
-            Player.Instance.OnMaxHeightChanged -= Player_OnMaxHeightChanged;
+        if (_player != null)
+            _player.OnMaxHeightChanged -= Player_OnMaxHeightChanged;
     }
 
     private void Player_OnMaxHeightChanged(float newPlayerMaxHeight)

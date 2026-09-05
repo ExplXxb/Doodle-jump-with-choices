@@ -10,8 +10,6 @@ public class Player : MonoBehaviour
     private const string JUMP = "Jump";
     private const float WRAP_SAFETY_MARGIN = 0.01f;
 
-    public static Player Instance;
-
     public event Action OnStartFalling;
     public event Action OnStartJumping;
     public event Action<float> OnMaxHeightChanged;
@@ -20,6 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private CapsuleCollider2D _capsuleCollider2D;
     [SerializeField] private PlayerSFX _playerSFX;
+    [SerializeField] private PlayerVisual _playerVisual;
 
     [Header("General")]
     [SerializeField] private float _maxFallSpeed = 1000f;
@@ -53,25 +52,18 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (_playerVisual != null)
+        {
+            _playerVisual.Construct(this);
+        }
 
         _rigidbody = GetComponent<Rigidbody2D>();
-        if (_rigidbody == null)
-        {
-            Debug.LogError($"{nameof(Player)}: відсутній Rigidbody2D на {name}", this);
-        }
-
         _health = GetComponent<Health>();
-        if (_health == null)
-        {
-            Debug.LogError($"{nameof(Player)}: відсутній {nameof(Health)} на {name}", this);
-        }
-
         _hitReaction = GetComponent<PlayerHitReaction>();
-        if (_hitReaction == null)
-        {
-            Debug.LogError($"{nameof(Player)}: відсутній {nameof(PlayerHitReaction)} на {name}", this);
-        }
+
+        if (_rigidbody == null) Debug.LogError($"{nameof(Player)}: відсутній Rigidbody2D на {name}", this);
+        if (_health == null) Debug.LogError($"{nameof(Player)}: відсутній {nameof(Health)} на {name}", this);
+        if (_hitReaction == null) Debug.LogError($"{nameof(Player)}: відсутній {nameof(PlayerHitReaction)} на {name}", this);
 
         _mainCamera = Camera.main;
     }
