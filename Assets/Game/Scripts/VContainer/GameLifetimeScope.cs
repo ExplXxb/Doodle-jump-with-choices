@@ -9,7 +9,7 @@ public class GameLifetimeScope : LifetimeScope
     protected override void Configure(IContainerBuilder builder)
     {
         builder.RegisterEntryPoint<GameInput>(Lifetime.Scoped);
-
         builder.RegisterComponentInNewPrefab(_playerPrefab, Lifetime.Scoped);
+        builder.Register<DefaultModeScoreSystem>(Lifetime.Scoped).AsImplementedInterfaces();
     }
 }

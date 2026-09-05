@@ -1,22 +1,22 @@
 using System;
-using UnityEngine;
-using VContainer;
 
-public class ScoreSystem : MonoBehaviour
+public class DefaultModeScoreSystem : IDisposable, IScoreSystem
 {
     public event Action<int> OnScoreChanged;
 
-    [Header("General")]
-    [SerializeField] private float _heightMultiplier = 10.0f;
-
+    private readonly float _heightMultiplier = 5.0f;
     private int _score;
-
     private Player _player;
+    private float _playerMaxHeight;
 
-    [Inject]
-    public void Construct(Player player)
+    public DefaultModeScoreSystem(Player player)
     {
         _player = player;
+
+        if (_player != null)
+        {
+            _player.OnMaxHeightChanged += Player_OnMaxHeightChanged;
+        }
     }
 
     public int Score
@@ -30,21 +30,15 @@ public class ScoreSystem : MonoBehaviour
 
                 OnScoreChanged?.Invoke(Score);
             }
-
         }
     }
 
-    private float _playerMaxHeight;
-
-    private void Start()
-    {
-        _player.OnMaxHeightChanged += Player_OnMaxHeightChanged;
-    }
-
-    private void OnDestroy()
+    void IDisposable.Dispose()
     {
         if (_player != null)
+        {
             _player.OnMaxHeightChanged -= Player_OnMaxHeightChanged;
+        }
     }
 
     private void Player_OnMaxHeightChanged(float newPlayerMaxHeight)
