@@ -17,7 +17,6 @@ public class DeathUIController : MonoBehaviour
 
     private PlayerDeathHandler _playerDeathHandler;
 
-    [Inject]
     public void Construct(Player player)
     {
         _playerDeathHandler = player.GetComponent<PlayerDeathHandler>();

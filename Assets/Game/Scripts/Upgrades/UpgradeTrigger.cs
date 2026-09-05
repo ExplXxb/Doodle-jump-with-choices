@@ -13,7 +13,6 @@ public class UpgradeTrigger : MonoBehaviour
 
     private Player _player;
 
-    [Inject]
     public void Construct(Player player)
     {
         _player = player;

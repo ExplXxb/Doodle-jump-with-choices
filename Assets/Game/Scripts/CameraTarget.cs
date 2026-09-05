@@ -7,7 +7,6 @@ public class CameraTarget : MonoBehaviour
 
     private Transform _playerTransform;
 
-    [Inject]
     public void Construct(Player player)
     {
         _playerTransform = player.transform;
