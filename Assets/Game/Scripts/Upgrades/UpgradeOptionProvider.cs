@@ -2,9 +2,14 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class UpgradeOptionProvider : MonoBehaviour
+public class UpgradeOptionProvider
 {
-    [SerializeField] private List<EffectSO> _allEffects;
+    private readonly List<EffectSO> _allEffects;
+
+    public UpgradeOptionProvider(List<EffectSO> allEffects)
+    {
+        _allEffects = allEffects;
+    }
 
     public List<EffectSO> GetChoices(EffectRarity positiveRarity, EffectRarity negativeRarity, HashSet<EffectSO> excluded)
     {

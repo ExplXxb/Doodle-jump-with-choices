@@ -1,27 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
-public class GameSettings : MonoBehaviour
+public class GameSettings
 {
-    public static GameSettings Instance { get; private set; }
+    private readonly GenerationSettings _baseGenerationSettings;
+    private readonly List<GenerationSettingsEffectSO> _activeEffects = new List<GenerationSettingsEffectSO>();
 
-    [SerializeField] private GenerationSettings _baseGenerationSettings;
-
-    private List<GenerationSettingsEffectSO> _activeEffects = new List<GenerationSettingsEffectSO>();
     private GenerationSettings _currentGenerationSettings;
     public GenerationSettings CurrentGenerationSettings => _currentGenerationSettings;
 
-    private void Awake()
+    public GameSettings(GenerationSettings baseGenerationSettings)
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
-
-    private void Start()
-    {
+        _baseGenerationSettings = baseGenerationSettings;
         RecalculateGenerationSettings();
     }
 

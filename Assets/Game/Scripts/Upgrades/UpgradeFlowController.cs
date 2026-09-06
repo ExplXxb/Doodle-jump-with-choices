@@ -1,16 +1,29 @@
 using System.Collections.Generic;
 using UnityEngine;
+using VContainer;
 
 public class UpgradeFlowController : MonoBehaviour
 {
     [SerializeField] private UpgradeTrigger _upgradeTrigger;
-    [SerializeField] private UpgradeSelectionSystem _selectionSystem;
     [SerializeField] private UpgradeUI _upgradeUI;
+    [SerializeField] private int _cardsPerChoice = 3;
 
-    [SerializeField] private int _cardsPerChoice;
+    private UpgradeSelectionSystem _selectionSystem;
+    private EffectContext _effectContext;
 
-    private UpgradeRarityCalculator _rarityCalculator = new UpgradeRarityCalculator();
+    private readonly UpgradeRarityCalculator _rarityCalculator = new UpgradeRarityCalculator();
     private int _upgradesTakenCount = 0;
+
+    [Inject]
+    public void Construct(UpgradeSelectionSystem selectionSystem)
+    {
+        _selectionSystem = selectionSystem;
+    }
+
+    public void SetContext(EffectContext effectContext)
+    {
+        _effectContext = effectContext;
+    }
 
     private void Start()
     {
@@ -49,11 +62,10 @@ public class UpgradeFlowController : MonoBehaviour
 
     private void HandleCardSelected(UpgradeCard card)
     {
-        _selectionSystem.SelectCard(card);
+        _selectionSystem.SelectCard(card, _effectContext);
         _upgradesTakenCount++;
 
         _upgradeUI.HideUI();
-
         Time.timeScale = 1f;
     }
 }

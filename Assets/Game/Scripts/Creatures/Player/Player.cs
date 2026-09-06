@@ -37,6 +37,7 @@ public class Player : MonoBehaviour
     private PlayerHitReaction _hitReaction;
 
     private IInput _input;
+    private PlayerStats _playerStats;
 
     public bool IsFalling { get; private set; }
     public bool IsFlying { get; private set; }
@@ -45,9 +46,10 @@ public class Player : MonoBehaviour
     public Vector2 GetGroundCheckPosition() => _groundCheck.position;
 
     [Inject]
-    public void Construct(IInput input)
+    public void Construct(IInput input, PlayerStats playerStats)
     {
         _input = input;
+        _playerStats = playerStats;
     }
 
     private void Awake()
@@ -82,7 +84,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        _verticalSpeed = PlayerStats.Instance.JumpPower;
+        _verticalSpeed = _playerStats.JumpPower;
     }
 
     private void Update()
@@ -153,7 +155,7 @@ public class Player : MonoBehaviour
 
         if (fallingDamageReceiver != null)
         {
-            fallingDamageReceiver.ReceiveFallingDamage(PlayerStats.Instance.StompDamage, transform.position);
+            fallingDamageReceiver.ReceiveFallingDamage(_playerStats.StompDamage, transform.position);
             HandleJump();
             return;
         }
@@ -163,7 +165,7 @@ public class Player : MonoBehaviour
 
     private void HandleGravity()
     {
-        _verticalSpeed -= PlayerStats.Instance.GravityAcceleration * Time.fixedDeltaTime;
+        _verticalSpeed -= _playerStats.GravityAcceleration * Time.fixedDeltaTime;
         _verticalSpeed = Mathf.Max(_verticalSpeed, -_maxFallSpeed);
 
         CheckGround();
@@ -172,7 +174,7 @@ public class Player : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector2 horizontalMovement = _inputVector * _hitReaction.InputMultiplier * PlayerStats.Instance.MovementSpeed * Time.fixedDeltaTime;
+        Vector2 horizontalMovement = _inputVector * _hitReaction.InputMultiplier * _playerStats.MovementSpeed * Time.fixedDeltaTime;
         Vector2 verticalMovement = new Vector2(0f, _verticalSpeed * Time.fixedDeltaTime);
         Vector2 knockback = _hitReaction.KnockbackDisplacement;
 
@@ -184,7 +186,7 @@ public class Player : MonoBehaviour
         if (_flyingCoroutine != null)
             return;
 
-        _verticalSpeed = PlayerStats.Instance.JumpPower * jumpMultiplier;
+        _verticalSpeed = _playerStats.JumpPower * jumpMultiplier;
 
         OnStartJumping?.Invoke();
     }

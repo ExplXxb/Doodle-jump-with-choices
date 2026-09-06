@@ -10,16 +10,24 @@ public class UpgradeTrigger : MonoBehaviour
     [SerializeField] private float _heightStep = 100f;
 
     private float _nextTriggerHeight;
-
     private Player _player;
 
-    public void Construct(Player player)
+    [Inject]
+    public void Construct(PlayerProvider playerProvider)
+    {
+        if (playerProvider.Instance != null)
+            InitTrigger(playerProvider.Instance);
+
+        playerProvider.OnPlayerSpawned += InitTrigger;
+    }
+
+    private void InitTrigger(Player player)
     {
         _player = player;
-
         _nextTriggerHeight = _heightStep;
         _player.OnMaxHeightChanged += HandleMaxHeightChanged;
     }
+
 
     private void OnDestroy()
     {
@@ -33,7 +41,7 @@ public class UpgradeTrigger : MonoBehaviour
     {
         if (newHeight < _nextTriggerHeight)
             return;
-        
+
         CalculateNextTriggerHeight();
         OnUpgradeTriggered?.Invoke();
     }

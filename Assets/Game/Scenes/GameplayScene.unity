@@ -492,52 +492,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 364493008}
   m_CullTransparentMesh: 1
---- !u!1 &442560063
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 442560065}
-  - component: {fileID: 442560064}
-  m_Layer: 0
-  m_Name: Upgrade Selection System
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &442560064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442560063}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e80abb1621ade44d90bfead3fc2d29e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UpgradeSelectionSystem
-  _optionProvider: {fileID: 1039424253}
---- !u!4 &442560065
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 442560063}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1039424254}
-  m_Father: {fileID: 472969100}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &472969098
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,7 +522,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeFlowController
   _upgradeTrigger: {fileID: 20389447}
-  _selectionSystem: {fileID: 442560064}
   _upgradeUI: {fileID: 2116127427}
   _cardsPerChoice: 3
 --- !u!4 &472969100
@@ -585,7 +538,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 20389448}
-  - {fileID: 442560065}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &508294445
@@ -1319,109 +1271,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!1 &1039424252
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1039424254}
-  - component: {fileID: 1039424253}
-  m_Layer: 0
-  m_Name: Upgrade Option Provider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1039424253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1039424252}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90ea6f8ce8f394346ac1ae2ca0eb2420, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UpgradeOptionProvider
-  _allEffects:
-  - {fileID: 11400000, guid: da2a400cf96c7af48b10a9c4510dbe70, type: 2}
-  - {fileID: 11400000, guid: b2571f19f3db50a4fbd5fd81483675d4, type: 2}
-  - {fileID: 11400000, guid: 1445735b267960b4384e5cc73de3faf4, type: 2}
-  - {fileID: 11400000, guid: 973abcbde7a7ae64b915dae1b652f0ed, type: 2}
-  - {fileID: 11400000, guid: ba2a1b8a39668c546b7d1bd39054130d, type: 2}
-  - {fileID: 11400000, guid: 98614845ab5f5fb46a9c9cc67fe1774b, type: 2}
-  - {fileID: 11400000, guid: 61a1ac69906a4184d9923bcbef138b74, type: 2}
-  - {fileID: 11400000, guid: 4dcb6f04b90165d4194ebab7761451ae, type: 2}
-  - {fileID: 11400000, guid: 47c03b311231a484cbd5277523e53630, type: 2}
-  - {fileID: 11400000, guid: 978e4df8dc61a534199fb6d1e82a9e9a, type: 2}
-  - {fileID: 11400000, guid: d38cbdcc5254bc044b59d505136b5b32, type: 2}
-  - {fileID: 11400000, guid: a7a502f429367f646ac20f6c8dbf8f8e, type: 2}
-  - {fileID: 11400000, guid: a5cd29e492ac5d94fbafdb3d1452aa06, type: 2}
---- !u!4 &1039424254
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1039424252}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 442560065}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1294889858
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1294889860}
-  - component: {fileID: 1294889859}
-  m_Layer: 0
-  m_Name: GameSettings
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1294889859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1294889858}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c694b75138a01c54da029075158b14ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameSettings
-  _baseGenerationSettings: {fileID: 11400000, guid: 627674dcdd5ee7e40b14ff3f75f029ca, type: 2}
---- !u!4 &1294889860
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1294889858}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1314722433
 GameObject:
   m_ObjectHideFlags: 0
@@ -1523,9 +1372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameplayEntryPoint
   _spawnPoint: {fileID: 77609086}
-  _cameraTarget: {fileID: 508687306}
-  _upgradeTrigger: {fileID: 20389447}
-  _deathUIController: {fileID: 837392518}
+  _upgradeFlowController: {fileID: 472969099}
 --- !u!1 &1521021608
 GameObject:
   m_ObjectHideFlags: 0
@@ -2119,8 +1966,28 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects: []
   _playerPrefab: {fileID: 1065492420612922401, guid: 272f08dbb362bc446a6a7c1530236161, type: 3}
+  _baseGenerationSettings: {fileID: 11400000, guid: 627674dcdd5ee7e40b14ff3f75f029ca, type: 2}
+  _allGameEffects:
+  - {fileID: 11400000, guid: da2a400cf96c7af48b10a9c4510dbe70, type: 2}
+  - {fileID: 11400000, guid: b2571f19f3db50a4fbd5fd81483675d4, type: 2}
+  - {fileID: 11400000, guid: 1445735b267960b4384e5cc73de3faf4, type: 2}
+  - {fileID: 11400000, guid: 973abcbde7a7ae64b915dae1b652f0ed, type: 2}
+  - {fileID: 11400000, guid: ba2a1b8a39668c546b7d1bd39054130d, type: 2}
+  - {fileID: 11400000, guid: 98614845ab5f5fb46a9c9cc67fe1774b, type: 2}
+  - {fileID: 11400000, guid: 61a1ac69906a4184d9923bcbef138b74, type: 2}
+  - {fileID: 11400000, guid: 4dcb6f04b90165d4194ebab7761451ae, type: 2}
+  - {fileID: 11400000, guid: 47c03b311231a484cbd5277523e53630, type: 2}
+  - {fileID: 11400000, guid: 978e4df8dc61a534199fb6d1e82a9e9a, type: 2}
+  - {fileID: 11400000, guid: d38cbdcc5254bc044b59d505136b5b32, type: 2}
+  - {fileID: 11400000, guid: a7a502f429367f646ac20f6c8dbf8f8e, type: 2}
+  - {fileID: 11400000, guid: a5cd29e492ac5d94fbafdb3d1452aa06, type: 2}
   _gameplayEntryPoint: {fileID: 1353829136}
   _scoreHolderUI: {fileID: 1824496513}
+  _upgradeFlowController: {fileID: 472969099}
+  _pickupSpawner: {fileID: 508294447}
+  _platformSpawner: {fileID: 1532404226}
+  _cameraTarget: {fileID: 508687306}
+  _upgradeTrigger: {fileID: 20389447}
 --- !u!4 &2098359964
 Transform:
   m_ObjectHideFlags: 0
@@ -2220,10 +2087,9 @@ SceneRoots:
   - {fileID: 1742732984}
   - {fileID: 1925009029}
   - {fileID: 619394802}
-  - {fileID: 508687307}
   - {fileID: 638562516}
-  - {fileID: 1294889860}
   - {fileID: 119797971}
   - {fileID: 472969100}
+  - {fileID: 508687307}
   - {fileID: 77609086}
   - {fileID: 2098359964}

@@ -13,13 +13,13 @@ public class PlayerStatEffectSO : EffectSO
     public float MovementSpeedDelta => _movementSpeedDelta;
     public float GravityAccelerationDelta => _gravityAccelerationDelta;
 
-    public override void Apply()
+    public override void Apply(EffectContext context)
     {
-        PlayerStats.Instance.AddEffect(this);
+        context.Stats.AddEffect(this);
     }
 
-    public override void Remove()
+    public override void Remove(EffectContext context)
     {
-        PlayerStats.Instance.RemoveEffect(this);
+        context.Stats.RemoveEffect(this);
     }
 }

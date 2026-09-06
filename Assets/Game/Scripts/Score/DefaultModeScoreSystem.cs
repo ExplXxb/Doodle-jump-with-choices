@@ -9,22 +9,27 @@ public class DefaultModeScoreSystem : IDisposable, IScoreSystem
     private Player _player;
     private float _playerMaxHeight;
 
-    public DefaultModeScoreSystem(Player player)
+    public DefaultModeScoreSystem(PlayerProvider playerProvider)
+    {
+        if (playerProvider.Instance != null)
+            BindPlayer(playerProvider.Instance);
+
+        playerProvider.OnPlayerSpawned += BindPlayer;
+    }
+
+    private void BindPlayer(Player player)
     {
         _player = player;
-
-        if (_player != null)
-        {
-            _player.OnMaxHeightChanged += Player_OnMaxHeightChanged;
-        }
+        _player.OnMaxHeightChanged += Player_OnMaxHeightChanged;
     }
+
 
     public int Score
     {
         get { return _score; }
         private set
         {
-            if (Score != value)
+            if (_score != value)
             {
                 _score = value;
 

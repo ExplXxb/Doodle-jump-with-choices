@@ -17,10 +17,18 @@ public class DeathUIController : MonoBehaviour
 
     private PlayerDeathHandler _playerDeathHandler;
 
-    public void Construct(Player player)
+    [Inject]
+    public void Construct(PlayerProvider playerProvider)
+    {
+        if (playerProvider.Instance != null)
+            BindDeathHandler(playerProvider.Instance);
+
+        playerProvider.OnPlayerSpawned += BindDeathHandler;
+    }
+
+    private void BindDeathHandler(Player player)
     {
         _playerDeathHandler = player.GetComponent<PlayerDeathHandler>();
-
         if (_playerDeathHandler != null)
         {
             _playerDeathHandler.OnDeathUIStart += Show;

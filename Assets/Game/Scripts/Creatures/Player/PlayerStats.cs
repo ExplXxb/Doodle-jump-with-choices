@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStats : MonoBehaviour
+public class PlayerStats
 {
-    public static PlayerStats Instance { get; private set; }
-
-    [SerializeField] private float _baseJumpPower = 18f;
-    [SerializeField] private float _baseMovementSpeed = 10f;
-    [SerializeField] private float _baseGravityAcceleration = 30f;
-    [SerializeField] private float _baseStompDamage = 1f;
+    private readonly float _baseJumpPower = 18f;
+    private readonly float _baseMovementSpeed = 10f;
+    private readonly float _baseGravityAcceleration = 30f;
+    private readonly float _baseStompDamage = 1f;
 
     private List<PlayerStatEffectSO> _activeEffects = new List<PlayerStatEffectSO>();
 
@@ -17,9 +15,8 @@ public class PlayerStats : MonoBehaviour
     public float GravityAcceleration { get; private set; }
     public float StompDamage { get; private set; }
 
-    private void Awake()
+    public PlayerStats()
     {
-        Instance = this;
         RecalculateStats();
     }
 

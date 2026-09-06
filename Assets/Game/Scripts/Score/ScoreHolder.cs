@@ -16,22 +16,28 @@ public class ScoreHolder : MonoBehaviour
     public void Construct(IScoreSystem scoreSystem)
     {
         _scoreSystem = scoreSystem;
+
+        _scoreSystem.OnScoreChanged += ScoreSystem_OnScoreChanged;
     }
 
     private void Awake()
     {
         if (_textMeshProUGUI == null)
         {
-            Debug.LogWarning($"{nameof(ScoreHolder)}: відсутній TextMeshProUGUI на {name}", this);
             _textMeshProUGUI = GetComponentInChildren<TextMeshProUGUI>();
+            if (_textMeshProUGUI == null)
+            {
+                Debug.LogError($"{nameof(ScoreHolder)}: Категорично відсутній TextMeshProUGUI на {name} або в його дітях!", this);
+            }
         }
     }
 
     private void Start()
     {
-        _scoreSystem.OnScoreChanged += ScoreSystem_OnScoreChanged;
-
-        UpdateScore(_scoreSystem.Score);
+        if (_scoreSystem != null && _textMeshProUGUI != null)
+        {
+            UpdateScore(_scoreSystem.Score);
+        }
     }
 
     private void OnDestroy()
@@ -47,6 +53,8 @@ public class ScoreHolder : MonoBehaviour
 
     public void UpdateScore(int newScore)
     {
+        if (_textMeshProUGUI == null) return;
+
         _textMeshProUGUI.text = _textBeforeScore + newScore;
     }
 }
