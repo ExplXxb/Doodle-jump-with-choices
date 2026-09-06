@@ -25,6 +25,7 @@ public class GameLifetimeScope : LifetimeScope
     protected override void Configure(IContainerBuilder builder)
     {
         builder.RegisterEntryPoint<GameInput>(Lifetime.Scoped);
+        builder.RegisterEntryPoint<TimeSettingsInitializer>();
         builder.RegisterInstance(_playerPrefab);
 
         builder.Register<PlayerProvider>(Lifetime.Scoped).AsSelf();
