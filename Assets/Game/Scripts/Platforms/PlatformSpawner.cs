@@ -1,10 +1,9 @@
 using UnityEngine;
 using System.Collections.Generic;
+using VContainer;
 
 public class PlatformSpawner : MonoBehaviour
 {
-    public static PlatformSpawner Instance { get; private set; }
-
     [SerializeField] private Transform _cameraTarget;
     [SerializeField] private Camera _mainCamera;
 
@@ -21,21 +20,19 @@ public class PlatformSpawner : MonoBehaviour
     private float _lastReliablePlatformY;
     private float _lastSpawnX;
 
-    private GenerationSettings _сurrentGenerationZone => GameSettings.Instance.CurrentGenerationSettings;
-    private GenerationSettings _previousZone;
+    private GameSettings _gameSettings;
+    private PickupSpawner _pickupSpawner;
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
+    private GenerationSettings _previousGeneraionSettings;
+    private GenerationSettings _currentGenerationSettings => _gameSettings.CurrentGenerationSettings;
 
-    private void Start()
+
+    [Inject]
+    public void Construct(GameSettings gameSettings, PickupSpawner pickupSpawner)
     {
+        _gameSettings = gameSettings;
+        _pickupSpawner = pickupSpawner;
+
         _lastSpawnY = transform.position.y;
         _lastReliablePlatformY = _lastSpawnY;
 
@@ -46,15 +43,16 @@ public class PlatformSpawner : MonoBehaviour
 
     private void Update()
     {
-        if (_сurrentGenerationZone != _previousZone)
+        if (_gameSettings == null) return;
+
+        if (_currentGenerationSettings != _previousGeneraionSettings)
         {
             UpdateReliablePlatformsCache();
         }
 
-
         float screenTopY = _mainCamera.ViewportToWorldPoint(new Vector3(0, 1, 0)).y;
 
-        while (_lastSpawnY < screenTopY + _screenOffsetY + _сurrentGenerationZone.MaxVerticalPlatformDistance)
+        while (_lastSpawnY < screenTopY + _screenOffsetY + _currentGenerationSettings.MaxVerticalPlatformDistance)
         {
             GenerateNextPlatform();
         }
@@ -62,33 +60,25 @@ public class PlatformSpawner : MonoBehaviour
         DespawnBelowScreen();
     }
 
-    private void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            Instance = null;
-        }
-    }
-
     private void UpdateReliablePlatformsCache()
     {
-        _previousZone = _сurrentGenerationZone;
+        _previousGeneraionSettings = _currentGenerationSettings;
         _reliablePlatformsCache.Clear();
 
-        if (_сurrentGenerationZone == null || _сurrentGenerationZone.Platforms == null) return;
+        if (_currentGenerationSettings == null || _currentGenerationSettings.Platforms == null) return;
 
-        for (int i = 0; i < _сurrentGenerationZone.Platforms.Count; i++)
+        for (int i = 0; i < _currentGenerationSettings.Platforms.Count; i++)
         {
-            if (_сurrentGenerationZone.Platforms[i].IsReliable)
+            if (_currentGenerationSettings.Platforms[i].IsReliable)
             {
-                _reliablePlatformsCache.Add(_сurrentGenerationZone.Platforms[i]);
+                _reliablePlatformsCache.Add(_currentGenerationSettings.Platforms[i]);
             }
         }
     }
 
     public void GenerateNextPlatform()
     {
-        var currentZone = _сurrentGenerationZone;
+        var currentZone = _currentGenerationSettings;
         var availableSettings = currentZone.Platforms;
         float maxZoneDistance = currentZone.MaxVerticalPlatformDistance;
 
@@ -130,10 +120,15 @@ public class PlatformSpawner : MonoBehaviour
         else
         {
             platform = Instantiate(chosenSettings.Prefab);
+
+            if (platform.TryGetComponent<IDespawnablePlatform>(out var despawnablePlatform))
+            {
+                despawnablePlatform.OnRequestDespawn += DespawnPlatform;
+            }
         }
 
-        float minXDist = _сurrentGenerationZone.MinHorizontalPlatformDistance;
-        float maxXDist = _сurrentGenerationZone.MaxHorizontalPlatformDistance;
+        float minXDist = _currentGenerationSettings.MinHorizontalPlatformDistance;
+        float maxXDist = _currentGenerationSettings.MaxHorizontalPlatformDistance;
 
         float randomDistanceX = Random.Range(minXDist, maxXDist);
         float directionX = Random.value > 0.5f ? 1f : -1f;
@@ -160,7 +155,10 @@ public class PlatformSpawner : MonoBehaviour
         _activePlatforms.Add(platform, chosenSettings);
         _activePlatformsList.Add(platform);
 
-        PickupSpawner.Instance.TrySpawnPickupOnPlatform(platform);
+        if (_pickupSpawner != null)
+        {
+            _pickupSpawner.TrySpawnPickupOnPlatform(platform);
+        }
     }
 
     private PlatformSpawnSettings GetRandomSettingsByWeight(List<PlatformSpawnSettings> availableSettings)
@@ -204,7 +202,7 @@ public class PlatformSpawner : MonoBehaviour
     {
         if (_activePlatforms.TryGetValue(platform, out var originalSettings))
         {
-            PickupSpawner.Instance.DespawnPickupForPlatform(platform);
+            _pickupSpawner.DespawnPickupForPlatform(platform);
 
             platform.SetActive(false);
 

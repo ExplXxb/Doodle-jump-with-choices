@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using VContainer;
 
 [System.Serializable]
 public class PickupSpawnOption
@@ -13,8 +14,6 @@ public class PickupSpawnOption
 
 public class PickupSpawner : MonoBehaviour
 {
-    public static PickupSpawner Instance { get; private set; }
-
     [SerializeField] private Camera _mainCamera;
 
     [SerializeField] private List<PickupSpawnOption> _pickupOptions;
@@ -23,24 +22,18 @@ public class PickupSpawner : MonoBehaviour
 
     private static float _chanceMultiplier = 1f;
 
+    private GameSettings _gameSettings;
+
     private Dictionary<GameObject, Queue<GameObject>> _pools = new Dictionary<GameObject, Queue<GameObject>>();
     private Dictionary<GameObject, (GameObject pickup, GameObject prefab)> _activeByPlatform
         = new Dictionary<GameObject, (GameObject, GameObject)>();
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
-    }
+    private GenerationSettings _generationSettings => _gameSettings.CurrentGenerationSettings;
 
-    private void OnDestroy()
+    [Inject]
+    public void Construct(GameSettings gameSettings)
     {
-        if (Instance == this)
-            Instance = null;
+        _gameSettings = gameSettings;
     }
 
     public static void AddChanceModifier(float delta) => _chanceMultiplier += delta;
@@ -84,7 +77,7 @@ public class PickupSpawner : MonoBehaviour
 
     private float GetChancePerPlatform()
     {
-        var zone = GameSettings.Instance.CurrentGenerationSettings;
+        var zone = _generationSettings;
         float avgDistance = (zone.MinVerticalPlatformDistance + zone.MaxVerticalPlatformDistance) / 2f;
 
         float bottomY = _mainCamera.ViewportToWorldPoint(new Vector3(0, 0, 0)).y;

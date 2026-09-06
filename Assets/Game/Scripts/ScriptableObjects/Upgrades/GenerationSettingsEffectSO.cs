@@ -9,13 +9,13 @@ public class GenerationSettingsEffectSO : EffectSO
 
     public List<PlatformSpawnSettings> PlatformSpawnSettings => _platformSpawnSettingsList;
 
-    public override void Apply()
+    public override void Apply(EffectContext context)
     {
-        GameSettings.Instance.AddEffect(this);
+        context.Settings.AddEffect(this);
     }
 
-    public override void Remove()
+    public override void Remove(EffectContext context)
     {
-        GameSettings.Instance.RemoveEffect(this);
+        context.Settings.RemoveEffect(this);
     }
 }

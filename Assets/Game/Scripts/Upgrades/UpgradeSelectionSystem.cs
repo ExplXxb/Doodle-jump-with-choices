@@ -1,9 +1,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UpgradeSelectionSystem : MonoBehaviour
+public class UpgradeSelectionSystem
 {
-    [SerializeField] private UpgradeOptionProvider _optionProvider;
+    private readonly UpgradeOptionProvider _optionProvider;
+
+    public UpgradeSelectionSystem(UpgradeOptionProvider optionProvider)
+    {
+        _optionProvider = optionProvider;
+    }
 
     public List<UpgradeCard> GenerateCardChoices(List<EffectRarity> positiveRarities, List<EffectRarity> negativeRarities)
     {
@@ -25,8 +30,8 @@ public class UpgradeSelectionSystem : MonoBehaviour
         return cards;
     }
 
-    public void SelectCard(UpgradeCard card)
+    public void SelectCard(UpgradeCard card, EffectContext context)
     {
-        card.Apply();
+        card.Apply(context);
     }
 }

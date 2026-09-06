@@ -1,10 +1,10 @@
 using System.Collections;
 using UnityEngine;
+using VContainer;
 
 public class DeathUIController : MonoBehaviour
 {
     [SerializeField] private CanvasGroup _canvasGroup;
-    [SerializeField] private PlayerDeathHandler _playerDeathHandler;
 
     [SerializeField, Range(0f, 1f)]
     private float _alphaTargetValue = 0.8f;
@@ -15,6 +15,26 @@ public class DeathUIController : MonoBehaviour
 
     private Coroutine _showingCoroutine;
 
+    private PlayerDeathHandler _playerDeathHandler;
+
+    [Inject]
+    public void Construct(PlayerProvider playerProvider)
+    {
+        if (playerProvider.Instance != null)
+            BindDeathHandler(playerProvider.Instance);
+
+        playerProvider.OnPlayerSpawned += BindDeathHandler;
+    }
+
+    private void BindDeathHandler(Player player)
+    {
+        _playerDeathHandler = player.GetComponent<PlayerDeathHandler>();
+        if (_playerDeathHandler != null)
+        {
+            _playerDeathHandler.OnDeathUIStart += Show;
+        }
+    }
+
     public bool IsShowed {  get; private set; }
 
     private void Awake()
@@ -24,14 +44,12 @@ public class DeathUIController : MonoBehaviour
         _canvasGroup.blocksRaycasts = false;
     }
 
-    private void OnEnable()
+    private void OnDestroy()
     {
-        _playerDeathHandler.OnDeathUIStart += Show;
-    }
-
-    private void OnDisable()
-    {
-        _playerDeathHandler.OnDeathUIStart -= Show;
+        if (_playerDeathHandler != null)
+        {
+            _playerDeathHandler.OnDeathUIStart -= Show;
+        }
     }
 
     private void Show()

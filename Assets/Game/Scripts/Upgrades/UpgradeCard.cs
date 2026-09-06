@@ -9,9 +9,9 @@ public class UpgradeCard
         NegativeEffect = negativeEffect;
     }
 
-    public void Apply()
+    public void Apply(EffectContext context)
     {
-        PositiveEffect?.Apply();
-        NegativeEffect?.Apply();
+        PositiveEffect?.Apply(context);
+        NegativeEffect?.Apply(context);
     }
 }

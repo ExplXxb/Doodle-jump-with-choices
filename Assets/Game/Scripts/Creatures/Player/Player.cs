@@ -1,14 +1,14 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Windows;
+using VContainer;
 
 [SelectionBase]
 public class Player : MonoBehaviour
 {
     private const string JUMP = "Jump";
     private const float WRAP_SAFETY_MARGIN = 0.01f;
-
-    public static Player Instance { get; private set; }
 
     public event Action OnStartFalling;
     public event Action OnStartJumping;
@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _groundCheck;
     [SerializeField] private CapsuleCollider2D _capsuleCollider2D;
     [SerializeField] private PlayerSFX _playerSFX;
+    [SerializeField] private PlayerVisual _playerVisual;
 
     [Header("General")]
     [SerializeField] private float _maxFallSpeed = 1000f;
@@ -35,38 +36,36 @@ public class Player : MonoBehaviour
     private Health _health;
     private PlayerHitReaction _hitReaction;
 
+    private IInput _input;
+    private PlayerStats _playerStats;
+
     public bool IsFalling { get; private set; }
     public bool IsFlying { get; private set; }
     public bool IsDead => _health.IsDead;
     public Vector2 GetInputVector() => _inputVector;
     public Vector2 GetGroundCheckPosition() => _groundCheck.position;
 
+    [Inject]
+    public void Construct(IInput input, PlayerStats playerStats)
+    {
+        _input = input;
+        _playerStats = playerStats;
+    }
+
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (_playerVisual != null)
         {
-            Destroy(gameObject);
-            return;
+            _playerVisual.Construct(this);
         }
-        Instance = this;
 
         _rigidbody = GetComponent<Rigidbody2D>();
-        if (_rigidbody == null)
-        {
-            Debug.LogError($"{nameof(Player)}: відсутній Rigidbody2D на {name}", this);
-        }
-
         _health = GetComponent<Health>();
-        if (_health == null)
-        {
-            Debug.LogError($"{nameof(Player)}: відсутній {nameof(Health)} на {name}", this);
-        }
-
         _hitReaction = GetComponent<PlayerHitReaction>();
-        if (_hitReaction == null)
-        {
-            Debug.LogError($"{nameof(Player)}: відсутній {nameof(PlayerHitReaction)} на {name}", this);
-        }
+
+        if (_rigidbody == null) Debug.LogError($"{nameof(Player)}: відсутній Rigidbody2D на {name}", this);
+        if (_health == null) Debug.LogError($"{nameof(Player)}: відсутній {nameof(Health)} на {name}", this);
+        if (_hitReaction == null) Debug.LogError($"{nameof(Player)}: відсутній {nameof(PlayerHitReaction)} на {name}", this);
 
         _mainCamera = Camera.main;
     }
@@ -85,7 +84,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
-        _verticalSpeed = PlayerStats.Instance.JumpPower;
+        _verticalSpeed = _playerStats.JumpPower;
     }
 
     private void Update()
@@ -102,7 +101,7 @@ public class Player : MonoBehaviour
             WrapAroundHorizontally();
         }
 
-        _inputVector = GameInput.Instance.GetMovementVector();
+        _inputVector = _input.GetMovementVector();
     }
 
     private void FixedUpdate()
@@ -116,14 +115,6 @@ public class Player : MonoBehaviour
 
         HandleMovement();
         TryUpdateMaxHeight();
-    }
-
-    private void OnDestroy()
-    {
-        if (Instance == this)
-        {
-            Instance = null;
-        }
     }
 
     private void DetermineIsFalling()
@@ -164,7 +155,7 @@ public class Player : MonoBehaviour
 
         if (fallingDamageReceiver != null)
         {
-            fallingDamageReceiver.ReceiveFallingDamage(PlayerStats.Instance.StompDamage, transform.position);
+            fallingDamageReceiver.ReceiveFallingDamage(_playerStats.StompDamage, transform.position);
             HandleJump();
             return;
         }
@@ -174,7 +165,7 @@ public class Player : MonoBehaviour
 
     private void HandleGravity()
     {
-        _verticalSpeed -= PlayerStats.Instance.GravityAcceleration * Time.fixedDeltaTime;
+        _verticalSpeed -= _playerStats.GravityAcceleration * Time.fixedDeltaTime;
         _verticalSpeed = Mathf.Max(_verticalSpeed, -_maxFallSpeed);
 
         CheckGround();
@@ -183,7 +174,7 @@ public class Player : MonoBehaviour
 
     private void HandleMovement()
     {
-        Vector2 horizontalMovement = _inputVector * _hitReaction.InputMultiplier * PlayerStats.Instance.MovementSpeed * Time.fixedDeltaTime;
+        Vector2 horizontalMovement = _inputVector * _hitReaction.InputMultiplier * _playerStats.MovementSpeed * Time.fixedDeltaTime;
         Vector2 verticalMovement = new Vector2(0f, _verticalSpeed * Time.fixedDeltaTime);
         Vector2 knockback = _hitReaction.KnockbackDisplacement;
 
@@ -195,7 +186,7 @@ public class Player : MonoBehaviour
         if (_flyingCoroutine != null)
             return;
 
-        _verticalSpeed = PlayerStats.Instance.JumpPower * jumpMultiplier;
+        _verticalSpeed = _playerStats.JumpPower * jumpMultiplier;
 
         OnStartJumping?.Invoke();
     }

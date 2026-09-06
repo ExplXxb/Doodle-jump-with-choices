@@ -1,25 +1,39 @@
 using System;
 using UnityEngine;
+using VContainer;
 
 public class UpgradeTrigger : MonoBehaviour
 {
-    [SerializeField] private float _heightStepMultiplier = 1.4f;
-    [SerializeField] private float _heightStep = 100f;
-    private float _nextTriggerHeight;
-
     public event Action OnUpgradeTriggered;
 
-    private void Start()
+    [SerializeField] private float _heightStepMultiplier = 1.4f;
+    [SerializeField] private float _heightStep = 100f;
+
+    private float _nextTriggerHeight;
+    private Player _player;
+
+    [Inject]
+    public void Construct(PlayerProvider playerProvider)
     {
-        _nextTriggerHeight = _heightStep;
-        Player.Instance.OnMaxHeightChanged += HandleMaxHeightChanged;
+        if (playerProvider.Instance != null)
+            InitTrigger(playerProvider.Instance);
+
+        playerProvider.OnPlayerSpawned += InitTrigger;
     }
+
+    private void InitTrigger(Player player)
+    {
+        _player = player;
+        _nextTriggerHeight = _heightStep;
+        _player.OnMaxHeightChanged += HandleMaxHeightChanged;
+    }
+
 
     private void OnDestroy()
     {
-        if (Player.Instance != null)
+        if (_player != null)
         {
-            Player.Instance.OnMaxHeightChanged -= HandleMaxHeightChanged;
+            _player.OnMaxHeightChanged -= HandleMaxHeightChanged;
         }
     }
 
@@ -27,7 +41,7 @@ public class UpgradeTrigger : MonoBehaviour
     {
         if (newHeight < _nextTriggerHeight)
             return;
-        
+
         CalculateNextTriggerHeight();
         OnUpgradeTriggered?.Invoke();
     }
