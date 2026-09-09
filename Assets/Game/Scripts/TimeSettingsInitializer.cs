@@ -7,5 +7,6 @@ public class TimeSettingsInitializer : IInitializable
     {
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
+        Debug.Log("Time.timeScale = 1f;\r\n        Time.fixedDeltaTime = 0.02f;");
     }
 }

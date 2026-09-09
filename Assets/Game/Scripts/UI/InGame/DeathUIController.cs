@@ -60,13 +60,6 @@ public class DeathUIController : MonoBehaviour
         _showingCoroutine = StartCoroutine(ShowingRoutine());
     }
 
-    private void Hide()
-    {
-        _canvasGroup.alpha = 0.0f;
-        _canvasGroup.interactable = false;
-        _canvasGroup.blocksRaycasts = false;
-    }
-
     private IEnumerator ShowingRoutine()
     {
         float elapsedTime = 0f;

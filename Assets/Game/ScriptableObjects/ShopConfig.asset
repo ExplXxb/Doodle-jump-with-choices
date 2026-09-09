@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: ShopConfig
+  m_EditorClassIdentifier: Assembly-CSharp::ShopConfig
+  _lots:
+  - ShopLotIcon: {fileID: 7379870345558874033, guid: 1ed13e7493a647b49a7dde288457147e, type: 3}
+    UpgradeType: 0
+    MaxLevel: 4
+    UpgradeCosts: 0a000000190000004b000000c8000000
+  - ShopLotIcon: {fileID: 8957324059118975939, guid: 117c225721570de4d8092cea1e55f898, type: 3}
+    UpgradeType: 1
+    MaxLevel: 5
+    UpgradeCosts: 05000000140000003200000064000000c8000000
+  - ShopLotIcon: {fileID: 4417508316887063990, guid: 0d64e444bd0b5094e930bf66f6c8d153, type: 3}
+    UpgradeType: 2
+    MaxLevel: 3
+    UpgradeCosts: 19000000320000004b000000
