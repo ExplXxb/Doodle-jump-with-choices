@@ -35,6 +35,7 @@ public class Player : MonoBehaviour
     private float _maxHeight = 0f;
     private Health _health;
     private PlayerHitReaction _hitReaction;
+    private Coroutine _flyingCoroutine = null;
 
     private IInput _input;
     private PlayerStats _playerStats;
@@ -192,8 +193,6 @@ public class Player : MonoBehaviour
 
         OnStartJumping?.Invoke();
     }
-
-    private Coroutine _flyingCoroutine = null;
 
     public void PerformFly(float flyingTime, float flyingSpeedMultiplier, AudioClip flyingSound = null, float soundVolume = 1.0f)
     {

@@ -5,6 +5,8 @@ public class PlayerSFX : MonoBehaviour
     [SerializeField] private AudioSource _audioSource;
     [SerializeField] private SoundEffect[] _soundEffects;
 
+    private bool _isFlyingSoundPlaying = false;
+
     public void PlaySound(string actionName)
     {
         foreach (var effect in _soundEffects)
@@ -26,10 +28,34 @@ public class PlayerSFX : MonoBehaviour
         _audioSource.clip = audioClip;
         _audioSource.volume = volume;
         _audioSource.Play();
+
+        _isFlyingSoundPlaying = true;
     }
 
     public void StopPlayLoopingSound()
     {
         _audioSource.Stop();
+        _isFlyingSoundPlaying = false;
+    }
+
+    private void Update()
+    {
+        if (_isFlyingSoundPlaying)
+        {
+            if (Time.timeScale == 0)
+            {
+                if (_audioSource.isPlaying)
+                {
+                    _audioSource.Pause();
+                }
+            }
+            else
+            {
+                if (!_audioSource.isPlaying)
+                {
+                    _audioSource.UnPause();
+                }
+            }
+        }
     }
 }
