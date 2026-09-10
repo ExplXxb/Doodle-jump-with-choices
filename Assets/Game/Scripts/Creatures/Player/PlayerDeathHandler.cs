@@ -83,13 +83,13 @@ public class PlayerDeathHandler : MonoBehaviour
             realInterval = _timeSlowingInterval / Time.timeScale;
 
             float elapsed = Time.unscaledTime - lastLogTime;
-            Debug.Log($"timeScale: {Time.timeScale}, прошло реального времени: {elapsed}");
+            Debug.Log($"timeScale: {Time.timeScale}, пройшло реального часу: {elapsed}");
             lastLogTime = Time.unscaledTime;
 
             yield return new WaitForSecondsRealtime(realInterval);
         }
 
         Time.timeScale = 0f;
-        Debug.Log($"Вышли с while, timeScale: {Time.timeScale}");
+        Debug.Log($"Вийшли з while, timeScale: {Time.timeScale}");
     }
 }

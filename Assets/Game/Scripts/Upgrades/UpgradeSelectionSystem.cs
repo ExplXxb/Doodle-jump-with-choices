@@ -4,10 +4,12 @@ using UnityEngine;
 public class UpgradeSelectionSystem
 {
     private readonly UpgradeOptionProvider _optionProvider;
+    private readonly IAnalyticsService _analyticsService;
 
-    public UpgradeSelectionSystem(UpgradeOptionProvider optionProvider)
+    public UpgradeSelectionSystem(UpgradeOptionProvider optionProvider, IAnalyticsService analyticsService)
     {
         _optionProvider = optionProvider;
+        _analyticsService = analyticsService;
     }
 
     public List<UpgradeCard> GenerateCardChoices(List<EffectRarity> positiveRarities, List<EffectRarity> negativeRarities)
@@ -22,9 +24,12 @@ public class UpgradeSelectionSystem
             var pair = _optionProvider.GetChoices(positiveRarities[i], negativeRarities[i], usedEffects);
             if (pair.Count < 2) continue;
 
-            cards.Add(new UpgradeCard(pair[0], pair[1]));
+            var newCard = new UpgradeCard(pair[0], pair[1]);
+            cards.Add(newCard);
             usedEffects.Add(pair[0]);
             usedEffects.Add(pair[1]);
+
+            _analyticsService.LogCardSpawned(newCard);
         }
 
         return cards;
@@ -33,5 +38,7 @@ public class UpgradeSelectionSystem
     public void SelectCard(UpgradeCard card, EffectContext context)
     {
         card.Apply(context);
+
+        _analyticsService.LogCardSelected(card);
     }
 }
