@@ -32,6 +32,7 @@ public class GameLifetimeScope : LifetimeScope
 
         builder.Register<DefaultModeScoreSystem>(Lifetime.Scoped).AsSelf().AsImplementedInterfaces();
         builder.Register<PlayerStats>(Lifetime.Scoped).AsSelf();
+        builder.Register<PlayerWallet>(Lifetime.Scoped).AsSelf();
         builder.Register<GameSettings>(Lifetime.Scoped).WithParameter(_baseGenerationSettings).AsSelf();
         builder.Register<UpgradeOptionProvider>(Lifetime.Scoped).WithParameter(_allGameEffects);
         builder.Register<UpgradeSelectionSystem>(Lifetime.Scoped);

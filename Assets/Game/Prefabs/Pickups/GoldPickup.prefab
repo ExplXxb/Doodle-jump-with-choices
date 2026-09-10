@@ -68,7 +68,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.14
+  m_Radius: 0.2
 --- !u!114 &1684302288578947249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,9 +90,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4136164419089241781}
-  - component: {fileID: 4984543793153979736}
+  - component: {fileID: 6781977577096311470}
   m_Layer: 0
-  m_Name: FlyUpPickup
+  m_Name: GoldPickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ Transform:
   - {fileID: 7031126186361249056}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4984543793153979736
+--- !u!114 &6781977577096311470
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,14 +125,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1094758165116785532}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea679e15121ab2843835d6b3db8b3e5f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6f10725f3b0b6f648ad81bf503113736, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FlyUpPickup
+  m_EditorClassIdentifier: Assembly-CSharp::GoldPickup
   _pickupDirection: 0
-  _flySpeedMultiplier: 0.7
-  _flyTime: 5
-  _flyingSound: {fileID: 8300000, guid: e1e573d83d6c9274382c13da4b1794b7, type: 3}
-  _soundVolume: 0.75
+  GoldAmount: 1
+  _pickupSFX: {fileID: 388390909757055400}
 --- !u!1 &2588746917389654750
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,8 +178,8 @@ MonoBehaviour:
   _soundEffect:
     actionName: 
     clips:
-    - {fileID: 8300000, guid: e1e573d83d6c9274382c13da4b1794b7, type: 3}
-    volume: 0.1
+    - {fileID: 8300000, guid: 3f6f91a09a9196e4ab2b61cf41313274, type: 3}
+    volume: 0.3
 --- !u!1 &3630628670125335629
 GameObject:
   m_ObjectHideFlags: 0
@@ -263,7 +261,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -4382823841579910332, guid: e0bb914e32930d043ba82aa5876ec49c, type: 3}
+  m_Sprite: {fileID: 7966821305654872209, guid: 5a67a6d76c4899648aad6231bd14617f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

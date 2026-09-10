@@ -39,6 +39,12 @@ public class MetaProgressService
     public int GetCurrentLevel(ShopLotType type) => _currentLevels.GetValueOrDefault(type, 0);
     public int GetMaxLevel(ShopLotType type) => _shopUpgradesSettings.TryGetValue(type, out var s) ? s.MaxLevel : 0;
 
+    public void AddGold(int value)
+    {
+        TotalGold += value;
+        SaveProgress();
+    }
+
     public bool TryBuyShopLot(ShopLotType upgradeType)
     {
         if (GetCurrentLevel(upgradeType) >= GetMaxLevel(upgradeType)) return false;
@@ -85,7 +91,7 @@ public class MetaProgressService
             _currentLevels[pair.Key] = savedLevel;
         }
 
-        TotalGold = PlayerPrefs.GetInt("Meta_Gold", 1000);
+        TotalGold = PlayerPrefs.GetInt("Meta_Gold", 100);
         Debug.Log("Мета-прогрес завантажено!");
     }
 }
