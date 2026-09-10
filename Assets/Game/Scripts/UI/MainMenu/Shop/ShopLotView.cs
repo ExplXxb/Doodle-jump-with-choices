@@ -32,6 +32,11 @@ public class ShopLotView : MonoBehaviour
         }
         else
         {
+            _shopLotIconSprite.color = Color.gray;
+        }
+
+        if (currentLevel == maxLevel)
+        {
             _shopLotIconSprite.color = Color.yellow;
         }
 
