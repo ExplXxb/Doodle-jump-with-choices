@@ -36,6 +36,16 @@ public class PickupSpawner : MonoBehaviour
         _gameSettings = gameSettings;
     }
 
+    private void OnEnable()
+    {
+        Pickup.OnAnyPickupCollected += DespawnActivePickup;
+    }
+
+    private void OnDisable()
+    {
+        Pickup.OnAnyPickupCollected -= DespawnActivePickup;
+    }
+
     public static void AddChanceModifier(float delta) => _chanceMultiplier += delta;
 
     public void TrySpawnPickupOnPlatform(GameObject platform)
@@ -56,6 +66,37 @@ public class PickupSpawner : MonoBehaviour
 
         _activeByPlatform[platform] = (pickup, chosenOption.Prefab);
     }
+
+    public void DespawnActivePickup(GameObject pickup)
+    {
+        GameObject platformKey = null;
+        GameObject prefabValue = null;
+
+        foreach (var pair in _activeByPlatform)
+        {
+            if (pair.Value.pickup == pickup)
+            {
+                platformKey = pair.Key;
+                prefabValue = pair.Value.prefab;
+                break;
+            }
+        }
+
+        if (platformKey == null) return;
+
+        pickup.transform.SetParent(transform);
+        pickup.SetActive(false);
+
+        if (!_pools.TryGetValue(prefabValue, out var queue))
+        {
+            queue = new Queue<GameObject>();
+            _pools[prefabValue] = queue;
+        }
+        queue.Enqueue(pickup);
+
+        _activeByPlatform.Remove(platformKey);
+    }
+
 
     public void DespawnPickupForPlatform(GameObject platform)
     {

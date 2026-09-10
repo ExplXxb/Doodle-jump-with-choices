@@ -16,17 +16,20 @@ public class PlayerPickupCollector : MonoBehaviour
         if (!other.TryGetComponent<PickupTrigger>(out var pickupHitbox))
             return;
 
-        var pickup = other.GetComponentInParent<Pickup>();
+        var pickups = other.GetComponentsInParent<Pickup>();
 
-        if (pickup == null)
+        if (pickups == null || pickups.Length == 0)
         {
-            Debug.LogError($"{nameof(PlayerPickupCollector)}: відсутній наслідувач класу {nameof(Pickup)} на батьківському об'єкті", this);
+            Debug.LogError($"{nameof(PlayerPickupCollector)}: відсутні наслідувачі класу {nameof(Pickup)} на батьківському об'єкті", this);
             return;
         }
 
-        if (!pickup.CanPickup(_player))
-            return;
+        foreach (var pickup in pickups)
+        {
+            if (!pickup.CanPickup(_player))
+                continue;
 
-        pickup.OnPickup(_player);
+            pickup.Collect(_player);
+        }
     }
 }

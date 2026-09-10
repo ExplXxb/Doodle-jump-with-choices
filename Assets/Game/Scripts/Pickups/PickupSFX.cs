@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PickupSFX : MonoBehaviour
 {
-    [SerializeField] private AudioSource _audioSource;
     [SerializeField] private SoundEffect _soundEffect;
 
     public void PlaySound()
@@ -12,6 +11,8 @@ public class PickupSFX : MonoBehaviour
 
         var soundEffect = _soundEffect.clips[Random.Range(0, _soundEffect.clips.Length)];
 
-        _audioSource.PlayOneShot(soundEffect, _soundEffect.volume);
+        Vector3 spawnPosition = Camera.main.transform.position;
+
+        AudioSource.PlayClipAtPoint(soundEffect, spawnPosition, _soundEffect.volume);
     }
 }

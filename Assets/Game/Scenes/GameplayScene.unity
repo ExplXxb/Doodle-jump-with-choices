@@ -725,7 +725,13 @@ MonoBehaviour:
     BaseWeight: 30
   - Prefab: {fileID: 1094758165116785532, guid: dc54f9d39ffb8aa46bb384074ee4829e, type: 3}
     BaseWeight: 5
-  _targetPickupsPerScreen: 0.4
+  - Prefab: {fileID: 4915763436083002210, guid: 40f224c5be6d8724fbdf1db2640682ff, type: 3}
+    BaseWeight: 300
+  - Prefab: {fileID: 4915763436083002210, guid: e89193ae491cc7b448329919f13a19c6, type: 3}
+    BaseWeight: 90
+  - Prefab: {fileID: 4915763436083002210, guid: 475ce95be797481448d38ce92129463a, type: 3}
+    BaseWeight: 10
+  _targetPickupsPerScreen: 2
   _localSpawnOffset: {x: 0, y: 1.5, z: 0}
 --- !u!1 &508687305
 GameObject:

@@ -39,6 +39,7 @@ public class Player : MonoBehaviour
     private IInput _input;
     private PlayerStats _playerStats;
 
+    public PlayerWallet Wallet { get; private set; }
     public bool IsFalling { get; private set; }
     public bool IsFlying { get; private set; }
     public bool IsDead => _health.IsDead;
@@ -46,10 +47,11 @@ public class Player : MonoBehaviour
     public Vector2 GetGroundCheckPosition() => _groundCheck.position;
 
     [Inject]
-    public void Construct(IInput input, PlayerStats playerStats)
+    public void Construct(IInput input, PlayerStats playerStats, PlayerWallet wallet)
     {
         _input = input;
         _playerStats = playerStats;
+        Wallet = wallet;
     }
 
     private void Awake()
