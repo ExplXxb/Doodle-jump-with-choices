@@ -8,8 +8,15 @@ public class ProjectLifetimeScope : LifetimeScope
 
     protected override void Configure(IContainerBuilder builder)
     {
-        builder.RegisterComponent(_shopConfig);
+#if UNITY_WEBGL
+        builder.Register<IAnalyticsService, UnityAnalyticsService>(Lifetime.Singleton);
+#else
+        builder.Register<IAnalyticsService, FirebaseAnalyticsService>(Lifetime.Singleton);
+#endif
 
+        _shopConfig.Initialize();
+        builder.RegisterInstance(_shopConfig).AsSelf();
         builder.RegisterEntryPoint<MetaProgressService>(Lifetime.Singleton).AsSelf();
+        builder.RegisterEntryPoint<AnalyticsInitializer>();
     }
 }

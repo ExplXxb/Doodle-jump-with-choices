@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "825850562661",
+    "firebase_url": "https://doodle-jump-with-choices-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "doodle-jump-with-choices",
+    "storage_bucket": "doodle-jump-with-choices.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825850562661:android:f55deba4cf6020d8b49e8c",
+        "android_client_info": {
+          "package_name": "com.explxxb.doodlejumpwithchoices.pc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8Qkap39og6dwVXOheUWsq-f24kGSuFDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

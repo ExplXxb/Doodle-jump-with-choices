@@ -1,0 +1,13 @@
+<linker>
+    <assembly fullname="VContainer" preserve="all" />
+
+    <assembly fullname="Assembly-CSharp" preserve="all">
+        <type fullname="ShopConfig" preserve="all" />
+        <type fullname="UpgradeLotSettings" preserve="all" />
+        <type fullname="ShopLotType" preserve="all" /> 
+    </assembly>
+
+    <assembly fullname="mscorlib" preserve="all">
+        <namespace fullname="System.Reflection" preserve="all"/>
+    </assembly>
+</linker>
